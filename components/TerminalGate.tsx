@@ -238,7 +238,7 @@ export function TerminalGate() {
       if (!coarse.current) setTimeout(() => inputRef.current?.focus(), 60); // never force the mobile keyboard
     }, 2050);
 
-    /* always skippable via Esc */
+    /* always skippable via Esc + focus-trapped while open (aria-modal) */
     const onEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         e.preventDefault();
@@ -247,6 +247,26 @@ export function TerminalGate() {
       }
     };
     document.addEventListener("keydown", onEsc);
+    const onTrap = (e: KeyboardEvent) => {
+      if (e.key !== "Tab") return;
+      const gate = document.getElementById("gate");
+      if (!gate || done.current) return;
+      const focusables = [...gate.querySelectorAll<HTMLElement>("a[href], button:not([hidden]), input:not([hidden])")].filter(
+        (el) => el.offsetParent !== null,
+      );
+      if (!focusables.length) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      const active = document.activeElement as HTMLElement | null;
+      if (e.shiftKey && (active === first || !gate.contains(active))) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && (active === last || !gate.contains(active))) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", onTrap);
 
     /* rare signal-loss stutter while waiting */
     const stutter = setInterval(() => {
@@ -261,6 +281,7 @@ export function TerminalGate() {
     const pendingIntervals = intervals.current;
     return () => {
       document.removeEventListener("keydown", onEsc);
+      document.removeEventListener("keydown", onTrap);
       clearInterval(stutter);
       pendingTimers.forEach(clearTimeout);
       pendingIntervals.forEach(clearInterval);

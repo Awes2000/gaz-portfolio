@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useReducedMotion } from "motion/react";
-import { bindRipple } from "@/lib/bus";
+import { ACCESS_EVENT, bindRipple } from "@/lib/bus";
 
 /* ============================================================
    RIPPLE BACKGROUND — deep-water caustics via a tiny WebGL
@@ -125,7 +125,23 @@ export function RippleCanvas() {
 
     // pointer + state (mouse in backing-store px, y flipped for GL)
     let mx = W / 2, my = H / 2, tmx = mx, tmy = my;
-    let str = 0, audio = 0;
+    let str = 0, audio = 0, resolve = 0;
+
+    /* signature "resolve" on gate unlock: the field locks on — three
+       converging swells snap to centre, then the shimmer decays out */
+    const onAccess = () => {
+      resolve = 1;
+      const cx = innerWidth / 2;
+      const cy = innerHeight / 2;
+      [[0.32, 0], [0.18, 140], [0, 300]].forEach(([off, delay]) => {
+        setTimeout(() => {
+          tmx = (cx + innerWidth * (off as number)) * SCALE;
+          tmy = (innerHeight - cy) * SCALE;
+          str = 1.0;
+        }, delay as number);
+      });
+    };
+    window.addEventListener(ACCESS_EVENT, onAccess);
     const onMove = (e: PointerEvent) => {
       if (e.pointerType && e.pointerType !== "mouse") return;
       tmx = e.clientX * SCALE;
@@ -167,11 +183,17 @@ export function RippleCanvas() {
       mx += (tmx - mx) * 0.08;
       my += (tmy - my) * 0.08;
       str *= 0.96; // swell decays back to ambient
+      /* resolve envelope: a ringing shimmer that settles as access locks in */
+      let audioOut = audio;
+      if (resolve > 0.01) {
+        audioOut = Math.min(1, audio + resolve * (0.3 + 0.3 * Math.sin((1 - resolve) * 24)));
+        resolve *= 0.972;
+      }
       gl.uniform2f(uRes, W, H);
       gl.uniform1f(uTime, (now - t0) / 1000);
       gl.uniform2f(uMouse, mx, my);
       gl.uniform1f(uStr, str);
-      gl.uniform1f(uAudio, audio);
+      gl.uniform1f(uAudio, audioOut);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
       rafId = requestAnimationFrame(draw);
     };
@@ -188,10 +210,11 @@ export function RippleCanvas() {
       removeEventListener("resize", resize);
       removeEventListener("pointermove", onMove);
       removeEventListener("pointerdown", onDown);
+      window.removeEventListener(ACCESS_EVENT, onAccess);
       document.removeEventListener("visibilitychange", onVis);
       unbind();
     };
   }, [reduce]);
 
-  return <canvas id="ripple" ref={canvasRef} />;
+  return <canvas id="ripple" ref={canvasRef} aria-hidden="true" />;
 }

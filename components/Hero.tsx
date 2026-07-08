@@ -2,10 +2,11 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { useReducedMotion } from "motion/react";
+import { motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { useLang } from "@/components/LangProvider";
+import { ProofStrip } from "@/components/ProofStrip";
 import { T } from "@/components/T";
-import { ACCESS_EVENT } from "@/lib/bus";
+import { ACCESS_EVENT, ripple } from "@/lib/bus";
 import { useAmsterdamClock } from "@/lib/hooks/useAmsterdamClock";
 import { useTypewriter } from "@/lib/hooks/useTypewriter";
 
@@ -58,6 +59,18 @@ export function Hero() {
   const { typed, start } = useTypewriter(reduce);
   const wrapRef = useRef<HTMLElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  /* ONE scroll-driven beat: while the pinned hero scrolls out, the
+     shader swells then settles and the hero eases back. Desktop +
+     motion-ok only; the rest of the page scrolls normally. */
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
+  const beatOpacity = useTransform(scrollYProgress, [0, 0.72, 1], [1, 1, 0.3]);
+  const beatScale = useTransform(scrollYProgress, [0, 1], [1, 0.965]);
+  useMotionValueEvent(scrollYProgress, "change", (v) => {
+    if (reduce || v <= 0 || v >= 1) return;
+    ripple.setAudioLevel(Math.sin(v * Math.PI) * 0.55);
+  });
 
   /* intro on gate unlock (aws:access) + 9s safety fallback */
   useEffect(() => {
@@ -120,8 +133,9 @@ export function Hero() {
   const riseClass = (base: string) => `${base} rise${introd ? " in" : ""}`;
 
   return (
-    <section id="hero">
-      <div className="wrap hero-grid">
+    <section id="hero" ref={sectionRef}>
+      <motion.div className="hero-sticky" style={reduce ? undefined : { opacity: beatOpacity, scale: beatScale }}>
+        <div className="wrap hero-grid">
         <div className="hero-main">
           <div className={riseClass("hero-kicker")} style={riseDelay(0)}>
             <T k="hero.kicker" />
@@ -144,6 +158,9 @@ export function Hero() {
             <a className="link-mono" href="https://github.com/Awes2000" target="_blank" rel="noopener noreferrer">
               <T k="hero.viewgh" />
             </a>
+          </div>
+          <div className={riseClass("")} style={riseDelay(2)}>
+            <ProofStrip />
           </div>
         </div>
 
@@ -185,10 +202,11 @@ export function Hero() {
         </aside>
       </div>
 
-      <a href="#about" className="scroll-cue" id="scroll-cue" aria-label="Scroll to about">
-        <span>scroll</span>
-        <span className="sc-arrow">▾</span>
-      </a>
+        <a href="#about" className="scroll-cue" id="scroll-cue" aria-label="Scroll to about">
+          <span>scroll</span>
+          <span className="sc-arrow">▾</span>
+        </a>
+      </motion.div>
     </section>
   );
 }
