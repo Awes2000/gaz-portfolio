@@ -1,12 +1,11 @@
 import { CASES } from "@/lib/cases";
+import { SITE_URL } from "@/lib/siteUrl";
 
 /**
  * Structured data (JSON-LD) for rich results and entity understanding.
  * Server-rendered into <head> so crawlers get Person + ProfilePage +
  * each project as a CreativeWork without executing JS.
  */
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
 const PERSON = {
   "@type": "Person",

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Roboto_Mono, Roboto_Slab } from "next/font/google";
 import { JsonLd } from "@/components/JsonLd";
+import { SITE_URL } from "@/lib/siteUrl";
 import "./globals.css";
 
 const robotoSlab = Roboto_Slab({
@@ -23,8 +24,6 @@ const robotoMono = Roboto_Mono({
   variable: "--font-roboto-mono",
   display: "swap",
 });
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

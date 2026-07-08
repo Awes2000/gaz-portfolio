@@ -81,6 +81,16 @@ export const CASES: CaseFile[] = [
       { src: "/flutter-home.jpg", alt: "Home screen with week planner and study plan", width: 480, height: 865 },
       { src: "/flutter-taken.jpg", alt: "Tasks screen with AI quiz generation", width: 480, height: 868 },
     ],
+    sections: {
+      problem:
+        "Students needed one place to plan, focus and test themselves. The client, a teacher, commissioned an AI-powered study app his students would actually open every day, and it had to ship as a team graduation project on a fixed timeline.",
+      approach:
+        "Built as a team under the AIxWings org. I owned the app architecture and MVC structure, routing and navigation, and the theming and design system, and I shipped 5 of the screens against our own backend, wired up with Dio.",
+      decisions:
+        "Flutter with Riverpod for state and go_router for navigation kept the architecture predictable while the feature set grew: focus sessions, task planning with AI quiz generation, camera text scanning with ML Kit OCR and a leaderboard. Shipping as an installable PWA meant zero store friction.",
+      result:
+        "Live at app.aixwings.nl as an installable PWA, and the client is now pitching it for funding.",
+    },
   },
   {
     id: "CF-01",
@@ -92,6 +102,19 @@ export const CASES: CaseFile[] = [
     detail: "A full-stack property rental platform built with Next.js 16 and MongoDB. Listings with Cloudinary image uploads, interactive Mapbox maps, a PhotoSwipe gallery, bookmarking and messaging, with Google OAuth via NextAuth. A real end-to-end product: data model, API routes and a polished front end.",
     meta: { role: "Full-stack developer", year: "2025", stack: "Next.js · MongoDB · Mapbox", status: "Live on Vercel" },
     links: { github: "https://github.com/Awes2000/property-pulse-nextjs", live: "https://property-pulse-nextjs-phi.vercel.app/" },
+    shots: [
+      { src: "/pp-home.jpg", alt: "Property Pulse home page with property search", width: 1440, height: 900 },
+      { src: "/pp-listings.jpg", alt: "Property Pulse listings with rental properties", width: 1440, height: 900 },
+    ],
+    sections: {
+      problem:
+        "A rental platform lives or dies on how fast people can browse listings and how easily owners can publish them. The goal was a real end-to-end product, not a demo: data model, API routes and a polished front end.",
+      approach:
+        "Full-stack on Next.js 16 with MongoDB. Listings take Cloudinary image uploads, browsing gets interactive Mapbox maps and a PhotoSwipe gallery, and users get bookmarking and messaging behind Google OAuth via NextAuth.",
+      decisions:
+        "Keeping the whole product in one Next.js codebase, with the API routes living next to the UI, kept the data model honest and the iteration loop short.",
+      result: "Live on Vercel as a working rental platform.",
+    },
   },
   {
     id: "CF-02",
@@ -103,6 +126,19 @@ export const CASES: CaseFile[] = [
     detail: "A full-stack e-commerce store built with Next.js 16, TypeScript and Prisma against a Neon PostgreSQL database, with NextAuth v5 for auth. Product catalogue, cart and checkout flow, order history and a Recharts admin dashboard, with Radix UI and Tailwind on the front. The project where the back end and the front end finally met for me.",
     meta: { role: "Full-stack developer", year: "2025", stack: "Next.js · TypeScript · Prisma", status: "Live on Vercel" },
     links: { github: "https://github.com/Awes2000/prostore", live: "https://prostore-tau-eight.vercel.app/" },
+    shots: [
+      { src: "/prostore-home.jpg", alt: "ProStore storefront with featured products", width: 1440, height: 900 },
+      { src: "/prostore-catalog.jpg", alt: "ProStore catalogue with search and filters", width: 1440, height: 900 },
+    ],
+    sections: {
+      problem:
+        "E-commerce is where typed data pays off: products, carts, orders and the admin view all have to agree with each other. The goal was a full store with an admin side, not just a storefront.",
+      approach:
+        "Next.js 16 with TypeScript and Prisma against a Neon PostgreSQL database, with NextAuth v5 for auth. Product catalogue, cart and checkout flow, order history and a Recharts admin dashboard, with Radix UI and Tailwind on the front.",
+      decisions:
+        "A typed data layer end to end: the Prisma models drive both the API and the UI, so a schema change breaks the build instead of breaking production.",
+      result: "Live on Vercel. The project where the back end and the front end finally met for me.",
+    },
   },
   {
     id: "CF-03",
@@ -114,5 +150,15 @@ export const CASES: CaseFile[] = [
     detail: "Generates 99 random HSL swatches on load; click any one to copy its value to the clipboard and the page title updates to match. Built with three ES6 classes (HSLGenerator, ColorList, ColorCard) and styled in SCSS. This is where object-oriented JavaScript clicked for me: structure, encapsulation and code that scales past one file.",
     meta: { role: "Front-end developer", year: "2023", stack: "JS (ES6 classes) · SCSS", status: "Live demo" },
     links: { github: "https://github.com/Awes2000/colorpicker", live: "https://28003.hosts2.ma-cloud.nl/colorpicker/index.html" },
+    shots: [{ src: "/colorpicker-grid.jpg", alt: "Colorpicker grid of 99 random HSL swatches", width: 1440, height: 900 }],
+    sections: {
+      problem:
+        "A small tool with a sharp spec: generate 99 random HSL swatches on load, click any one to copy its value to the clipboard, and keep the code clean enough to grow.",
+      approach:
+        "Three ES6 classes split the responsibilities: HSLGenerator makes the colors, ColorList owns the collection, ColorCard renders each swatch and handles the copy click. Styled in SCSS, with the page title updating to the copied value.",
+      decisions:
+        "No framework on purpose. Handling state, rendering and events by hand is where object-oriented JavaScript clicked for me: structure, encapsulation and code that scales past one file.",
+      result: "The live demo is still up, and the fundamentals from this build carry into everything after it.",
+    },
   },
 ];

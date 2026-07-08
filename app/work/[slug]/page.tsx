@@ -5,8 +5,7 @@ import { notFound } from "next/navigation";
 import { RippleCanvas } from "@/components/RippleCanvas";
 import { ScannerCursor } from "@/components/ScannerCursor";
 import { CASES } from "@/lib/cases";
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+import { SITE_URL } from "@/lib/siteUrl";
 
 interface WorkParams {
   slug: string;
