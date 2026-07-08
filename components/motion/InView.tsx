@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type JSX } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useInView, useReducedMotion } from "motion/react";
 import { useLang } from "@/components/LangProvider";
 import type { I18nKey } from "@/lib/i18n";
@@ -14,7 +14,7 @@ import type { I18nKey } from "@/lib/i18n";
    ============================================================ */
 
 interface RiseProps {
-  as?: keyof JSX.IntrinsicElements;
+  as?: "div" | "aside" | "h2" | "p";
   className?: string;
   /** Stagger order within the section: delay = min(i * 70, 420)ms. */
   index?: number;
@@ -24,21 +24,18 @@ interface RiseProps {
 }
 
 /** `.rise` → `.in` when scrolled into view (threshold 0.18, once). */
-export function Rise({ as: Tag = "div", className = "", index, amount = 0.18, children, style }: RiseProps) {
-  const ref = useRef<HTMLElement>(null);
+export function Rise({ as = "div", className = "", index, amount = 0.18, children, style }: RiseProps) {
+  const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref as React.RefObject<Element>, { once: true, amount });
   const reduce = useReducedMotion();
   const delay = !reduce && index !== undefined ? Math.min(index * 70, 420) : undefined;
-  return (
-    // @ts-expect-error -- polymorphic tag with a shared HTMLElement ref
-    <Tag
-      ref={ref}
-      className={`${className}${inView ? " in" : ""}`}
-      style={delay !== undefined ? { ...style, transitionDelay: `${delay}ms` } : style}
-    >
-      {children}
-    </Tag>
-  );
+  const props = {
+    ref,
+    className: `${className} rise${inView ? " in" : ""}`.trim(),
+    style: delay !== undefined ? { ...style, transitionDelay: `${delay}ms` } : style,
+  };
+  const Tag = as;
+  return <Tag {...(props as React.HTMLAttributes<HTMLDivElement> & { ref: React.RefObject<HTMLDivElement | null> })}>{children}</Tag>;
 }
 
 /** `.wipe` sections → `.played` at 12% visibility (diagonal wipe). */

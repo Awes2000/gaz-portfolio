@@ -22,7 +22,9 @@ export function useTypewriter(reduce: boolean, opts: TypewriterOptions = {}): {
   const [typed, setTyped] = useState("");
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const doneRef = useRef(onDone);
-  doneRef.current = onDone;
+  useEffect(() => {
+    doneRef.current = onDone;
+  }, [onDone]);
 
   const clear = useCallback(() => {
     if (timer.current) {

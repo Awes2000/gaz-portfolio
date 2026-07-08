@@ -171,7 +171,7 @@ export function CommandPalette() {
     [pline, cd, logout, closePalette, later],
   );
 
-  /* global bindings: bus + ⌘K / Ctrl-K + Esc */
+  /* window-level bindings: bus + Cmd-K / Ctrl-K + Esc */
   useEffect(() => {
     const unbind = bindShell({ print: (l, c) => pline(l, c), open: openPalette, close: closePalette });
     const onKey = (e: KeyboardEvent) => {

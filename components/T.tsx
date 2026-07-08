@@ -1,12 +1,11 @@
 "use client";
 
-import type { JSX } from "react";
 import { useLang } from "@/components/LangProvider";
 import type { I18nKey } from "@/lib/i18n";
 
 interface TProps extends React.HTMLAttributes<HTMLElement> {
   k: I18nKey;
-  as?: keyof JSX.IntrinsicElements;
+  as?: "span" | "p" | "div" | "h2";
   hidden?: boolean;
 }
 

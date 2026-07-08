@@ -1,8 +1,8 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { type I18nKey, type Lang, SESSION_LANG_KEY, translate } from "@/lib/i18n";
-import { readSessionValue, writeSessionValue } from "@/lib/hooks/useSessionFlag";
+import { createContext, useCallback, useContext, useEffect, useMemo, useSyncExternalStore } from "react";
+import { type I18nKey, type Lang, translate } from "@/lib/i18n";
+import { langStore } from "@/lib/langStore";
 import { LANG_EVENT } from "@/lib/bus";
 import { sfx } from "@/lib/sfx";
 
@@ -19,28 +19,20 @@ const LangContext = createContext<LangContextValue>({
 });
 
 export function LangProvider({ children }: { children: React.ReactNode }) {
-  // Always render EN on the server so SSR and hydration match;
-  // the stored session language is adopted right after mount.
-  const [lang, setLangState] = useState<Lang>("en");
+  /* server snapshot is always EN; the stored session language is
+     adopted right after hydration via the external store */
+  const lang = useSyncExternalStore(langStore.subscribe, langStore.getSnapshot, langStore.getServerSnapshot);
 
+  /* sync the document language + notify non-React listeners */
   useEffect(() => {
-    const stored = readSessionValue(SESSION_LANG_KEY);
-    if (stored === "nl" || stored === "en") {
-      setLangState(stored);
-      document.documentElement.setAttribute("lang", stored);
-    }
-  }, []);
+    document.documentElement.setAttribute("lang", lang);
+    window.dispatchEvent(new CustomEvent(LANG_EVENT, { detail: { lang } }));
+  }, [lang]);
 
   const setLang = useCallback((l: Lang) => {
-    if (l !== "en" && l !== "nl") return;
-    setLangState((prev) => {
-      if (l === prev) return prev;
-      writeSessionValue(SESSION_LANG_KEY, l);
-      document.documentElement.setAttribute("lang", l);
-      window.dispatchEvent(new CustomEvent(LANG_EVENT, { detail: { lang: l } }));
-      sfx.click();
-      return l;
-    });
+    if (l === langStore.getSnapshot()) return;
+    langStore.set(l);
+    sfx.click();
   }, []);
 
   const value = useMemo<LangContextValue>(

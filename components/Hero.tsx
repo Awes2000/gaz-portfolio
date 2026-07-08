@@ -15,10 +15,7 @@ const CMDS = ["whoami", "cat focus.txt", "ls ~/skills", "status --now", "./ship.
 function useCardCommand(reduce: boolean): string {
   const [cmd, setCmd] = useState("");
   useEffect(() => {
-    if (reduce) {
-      setCmd("whoami");
-      return;
-    }
+    if (reduce) return;
     let timer: ReturnType<typeof setTimeout>;
     let ci = 0;
     const typeCmd = () => {
@@ -48,7 +45,7 @@ function useCardCommand(reduce: boolean): string {
     timer = setTimeout(typeCmd, 1400);
     return () => clearTimeout(timer);
   }, [reduce]);
-  return cmd;
+  return reduce ? "whoami" : cmd;
 }
 
 export function Hero() {

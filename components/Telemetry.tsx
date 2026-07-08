@@ -32,8 +32,9 @@ export function Telemetry() {
 
   /* sparkline bars + jittering ping, exactly like js/app.js */
   useEffect(() => {
-    setSpark(Array.from({ length: 14 }, () => 4 + Math.random() * 10));
-    if (reduce) return;
+    /* bars populate right after mount (async, so SSR HTML stays stable) */
+    const seed = setTimeout(() => setSpark(Array.from({ length: 14 }, () => 4 + Math.random() * 10)), 0);
+    if (reduce) return () => clearTimeout(seed);
     const id = setInterval(() => {
       setPing((8 + Math.random() * 22).toFixed(0) + " ms");
       setSpark((prev) => {
@@ -43,7 +44,10 @@ export function Telemetry() {
         return next;
       });
     }, 1400);
-    return () => clearInterval(id);
+    return () => {
+      clearTimeout(seed);
+      clearInterval(id);
+    };
   }, [reduce]);
 
   return (
