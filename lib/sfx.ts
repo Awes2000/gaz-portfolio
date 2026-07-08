@@ -1,0 +1,175 @@
+/* ============================================================
+   SFX — synthesized game-UI sound layer (Web Audio, no files).
+   Ported 1:1 from js/sound.js. Cohesive synth family: sine/
+   triangle blips, filtered-noise zaps, a low ambient drone, a
+   sonar sweep for unlock. MUTED BY DEFAULT. Lazy-inits on first
+   opt-in (zero cost when off). Session-only state.
+   ============================================================ */
+
+type Listener = () => void;
+
+let ctx: AudioContext | null = null;
+let master: GainNode | null = null;
+let droneGain: GainNode | null = null;
+let ready = false;
+let on = false;
+let lastHover = 0;
+let noiseBuf: AudioBuffer | null = null;
+
+const listeners = new Set<Listener>();
+
+function emit() {
+  listeners.forEach((l) => l());
+}
+
+function init() {
+  if (ready || typeof window === "undefined") return;
+  ready = true;
+  ctx = new AudioContext();
+  master = ctx.createGain();
+  master.gain.value = 0.0; // ramp up on enable
+  // gentle master lowpass so nothing is harsh
+  const lp = ctx.createBiquadFilter();
+  lp.type = "lowpass";
+  lp.frequency.value = 6500;
+  master.connect(lp);
+  lp.connect(ctx.destination);
+
+  // ambient bed: two detuned low sines + faint filtered noise
+  droneGain = ctx.createGain();
+  droneGain.gain.value = 0.0;
+  const o1 = ctx.createOscillator();
+  o1.type = "sine";
+  o1.frequency.value = 55;
+  const o2 = ctx.createOscillator();
+  o2.type = "sine";
+  o2.frequency.value = 55.4;
+  const dGain = ctx.createGain();
+  dGain.gain.value = 0.5;
+  o1.connect(dGain);
+  o2.connect(dGain);
+  dGain.connect(droneGain);
+  // slow LFO shimmer on the drone
+  const lfo = ctx.createOscillator();
+  lfo.type = "sine";
+  lfo.frequency.value = 0.08;
+  const lfoGain = ctx.createGain();
+  lfoGain.gain.value = 0.18;
+  lfo.connect(lfoGain);
+  lfoGain.connect(droneGain.gain);
+  droneGain.connect(master);
+  o1.start();
+  o2.start();
+  lfo.start();
+}
+
+// shared short noise buffer
+function noise(): AudioBufferSourceNode {
+  if (!noiseBuf) {
+    noiseBuf = ctx!.createBuffer(1, ctx!.sampleRate * 0.4, ctx!.sampleRate);
+    const d = noiseBuf.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+  }
+  const s = ctx!.createBufferSource();
+  s.buffer = noiseBuf;
+  return s;
+}
+
+// a tonal blip: osc + quick env, tiny random detune
+function blip(freq: number, dur: number, type: OscillatorType, vol: number, glideTo?: number) {
+  if (!on || !ctx || !master) return;
+  const t = ctx.currentTime;
+  const o = ctx.createOscillator();
+  o.type = type || "sine";
+  const detune = (Math.random() * 2 - 1) * 12;
+  o.frequency.setValueAtTime(freq, t);
+  o.detune.value = detune;
+  if (glideTo) o.frequency.exponentialRampToValueAtTime(glideTo, t + dur);
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(0, t);
+  g.gain.linearRampToValueAtTime(vol, t + 0.006);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  o.connect(g);
+  g.connect(master);
+  o.start(t);
+  o.stop(t + dur + 0.02);
+}
+
+function zapSound(big?: boolean) {
+  if (!on || !ctx || !master) return;
+  const t = ctx.currentTime;
+  const s = noise();
+  const bp = ctx.createBiquadFilter();
+  bp.type = "bandpass";
+  bp.frequency.setValueAtTime(big ? 800 : 1400, t);
+  bp.frequency.exponentialRampToValueAtTime(big ? 220 : 600, t + (big ? 0.22 : 0.12));
+  bp.Q.value = 0.8;
+  const g = ctx.createGain();
+  const amp = big ? 0.16 : 0.06;
+  g.gain.setValueAtTime(amp, t);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + (big ? 0.24 : 0.13));
+  s.connect(bp);
+  bp.connect(g);
+  g.connect(master);
+  s.start(t);
+  s.stop(t + 0.3);
+}
+
+export const sfx = {
+  get enabled() {
+    return on;
+  },
+  subscribe(l: Listener): () => void {
+    listeners.add(l);
+    return () => listeners.delete(l);
+  },
+  toggle(): boolean {
+    return this.set(!on);
+  },
+  set(v: boolean): boolean {
+    if (v && !ready) init();
+    on = !!v;
+    if (ctx && master && droneGain) {
+      void ctx.resume();
+      const t = ctx.currentTime;
+      master.gain.cancelScheduledValues(t);
+      master.gain.linearRampToValueAtTime(on ? 0.5 : 0.0, t + 0.25);
+      droneGain.gain.cancelScheduledValues(t);
+      droneGain.gain.linearRampToValueAtTime(on ? 0.05 : 0.0, t + 0.6);
+    }
+    emit();
+    if (on) this.click();
+    return on;
+  },
+  hover() {
+    const now = performance.now();
+    if (now - lastHover < 70) return; // throttle machine-gun blips
+    lastHover = now;
+    blip(2100 + Math.random() * 120, 0.05, "sine", 0.018);
+  },
+  click() {
+    blip(880, 0.07, "triangle", 0.05, 1320);
+  },
+  type() {
+    blip(1500 + Math.random() * 300, 0.022, "square", 0.012);
+  },
+  zap(big?: boolean) {
+    zapSound(big);
+  },
+  unlock() {
+    // the one "hero" sound — a smooth sonar/confirm sweep
+    if (!on || !ctx) return;
+    blip(330, 0.5, "sine", 0.1, 990);
+    setTimeout(() => blip(660, 0.55, "sine", 0.08, 1320), 90);
+    setTimeout(() => zapSound(true), 40);
+  },
+  root() {
+    // rare, distinct
+    if (!on || !ctx) return;
+    [523, 659, 784, 1047].forEach((f, i) => setTimeout(() => blip(f, 0.22, "triangle", 0.06), i * 70));
+  },
+};
+
+/* delegated global hover / click feedback selector (same as static build) */
+export const SFX_INTERACTIVE =
+  "a,button,.case,.hud-ic,.sb-term,.sb-sfx,.cap,.contact-cta,.btn-ghost,.foot-replay";

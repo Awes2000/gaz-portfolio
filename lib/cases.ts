@@ -1,0 +1,88 @@
+/* ============================================================
+   CASE FILES — data ported 1:1 from the CASES array in js/app.js.
+   Copy is byte-identical; asset paths point at public/.
+   ============================================================ */
+
+export interface CaseShot {
+  src: string;
+  alt: string;
+}
+
+export interface CaseLinks {
+  github?: string;
+  live?: string;
+  gallery?: string;
+}
+
+export interface CaseMeta {
+  role: string;
+  year: string;
+  stack: string;
+  status: string;
+}
+
+export interface CaseFile {
+  feature?: boolean;
+  id: string;
+  cls: string;
+  title: string;
+  tech: string[];
+  desc: string;
+  detail: string;
+  meta: CaseMeta;
+  links: CaseLinks;
+  media?: string;
+  mediaUrl?: string;
+  shots?: CaseShot[];
+}
+
+export const CASES: CaseFile[] = [
+  {
+    feature: true,
+    id: "CF-00 // PRIORITY",
+    cls: "CLASSIFIED",
+    title: "Flurter",
+    tech: ["Flutter", "Dart", "Riverpod", "go_router", "ML Kit OCR"],
+    desc: "AIxWings team graduation project: an AI-powered study app for students, shipped as an installable PWA. I owned the app architecture, theming and design system, and shipped 5 screens.",
+    detail: "A team graduation project under the AIxWings org, commissioned by a teacher (the client) who is now pitching it for funding. An AI-powered study app: focus sessions, task planning with AI quiz generation, camera text scanning (ML Kit OCR) and a leaderboard. I owned the app architecture and MVC structure, routing and navigation, the theming and design system, and shipped 5 screens. Built in Flutter with Riverpod, go_router and Dio against our own backend.",
+    meta: { role: "Architecture · theming · 5 screens", year: "2025–2026", stack: "Flutter · Dart · Riverpod", status: "Live · installable PWA" },
+    links: { live: "https://app.aixwings.nl/" },
+    media: "FLUTTER · PWA",
+    mediaUrl: "app.aixwings.nl · graduation project",
+    shots: [
+      { src: "/flutter-focus.jpg", alt: "Focus timer screen with pomodoro sessions" },
+      { src: "/flutter-home.jpg", alt: "Home screen with week planner and study plan" },
+      { src: "/flutter-taken.jpg", alt: "Tasks screen with AI quiz generation" },
+    ],
+  },
+  {
+    id: "CF-01",
+    cls: "CLASSIFIED",
+    title: "Property Pulse",
+    tech: ["Next.js 16", "MongoDB", "Mapbox", "Cloudinary", "OAuth"],
+    desc: "A property rental listing platform: image uploads, interactive maps and Google sign-in.",
+    detail: "A full-stack property rental platform built with Next.js 16 and MongoDB. Listings with Cloudinary image uploads, interactive Mapbox maps, a PhotoSwipe gallery, bookmarking and messaging, with Google OAuth via NextAuth. A real end-to-end product: data model, API routes and a polished front end.",
+    meta: { role: "Full-stack developer", year: "2025", stack: "Next.js · MongoDB · Mapbox", status: "Live on Vercel" },
+    links: { github: "https://github.com/Awes2000/property-pulse-nextjs", live: "https://property-pulse-nextjs-phi.vercel.app/" },
+  },
+  {
+    id: "CF-02",
+    cls: "CLASSIFIED",
+    title: "ProStore",
+    tech: ["Next.js 16", "TypeScript", "Prisma", "PostgreSQL", "NextAuth"],
+    desc: "A full-stack e-commerce store with a typed data layer, auth and an admin dashboard.",
+    detail: "A full-stack e-commerce store built with Next.js 16, TypeScript and Prisma against a Neon PostgreSQL database, with NextAuth v5 for auth. Product catalogue, cart and checkout flow, order history and a Recharts admin dashboard, with Radix UI and Tailwind on the front. The project where the back end and the front end finally met for me.",
+    meta: { role: "Full-stack developer", year: "2025", stack: "Next.js · TypeScript · Prisma", status: "Live on Vercel" },
+    links: { github: "https://github.com/Awes2000/prostore", live: "https://prostore-tau-eight.vercel.app/" },
+  },
+  {
+    id: "CF-03",
+    cls: "CLASSIFIED",
+    title: "Colorpicker",
+    tech: ["JavaScript", "OOP", "SCSS"],
+    desc: "A browser-based HSL palette generator: 99 random swatches, click any one to copy its value.",
+    detail: "Generates 99 random HSL swatches on load; click any one to copy its value to the clipboard and the page title updates to match. Built with three ES6 classes (HSLGenerator, ColorList, ColorCard) and styled in SCSS. This is where object-oriented JavaScript clicked for me: structure, encapsulation and code that scales past one file.",
+    meta: { role: "Front-end developer", year: "2023", stack: "JS (ES6 classes) · SCSS", status: "Live demo" },
+    links: { github: "https://github.com/Awes2000/colorpicker", live: "https://28003.hosts2.ma-cloud.nl/colorpicker/index.html" },
+  },
+];
