@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { CaseCard } from "@/components/CaseCard";
@@ -27,6 +28,9 @@ function DetailBody({ c }: { c: CaseFile }) {
         <div><div className="k">Status</div><div className="v">{c.meta.status}</div></div>
       </div>
       <div className="detail-actions">
+        <Link className="btn-ghost" href={`/work/${c.slug}`}>
+          Full case file →
+        </Link>
         {c.links.live && (
           <a className="btn-ghost" href={c.links.live} target="_blank" rel="noopener noreferrer">
             Open live ↗

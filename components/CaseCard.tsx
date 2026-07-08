@@ -1,9 +1,11 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useRef, useState } from "react";
 import { useInView, useReducedMotion } from "motion/react";
 import { FolderIcon, GithubIcon, LinkIcon, PlayIcon } from "@/components/caseIcons";
+import { HoverVideo } from "@/components/HoverVideo";
 import { T } from "@/components/T";
 import type { CaseFile } from "@/lib/cases";
 
@@ -97,7 +99,11 @@ export function CaseCard({ c, onOpen }: CaseCardProps) {
               <li key={t}>{t}</li>
             ))}
           </ul>
-          <T k="case.cta" className="case-cta" />
+          {/* real deep link — crawlable path to the full dossier;
+              clicking the card body still opens the quick-view morph */}
+          <Link href={`/work/${c.slug}`} data-stop aria-label={`Open full case file: ${c.title}`}>
+            <T k="case.cta" className="case-cta" />
+          </Link>
         </div>
       </div>
       {c.feature && (
@@ -111,8 +117,16 @@ export function CaseCard({ c, onOpen }: CaseCardProps) {
               </span>
               <span className="url">{c.mediaUrl || c.media || "preview"}</span>
             </div>
-            <div className={`cm-stage${c.shots ? " has-shots" : ""}`}>
-              {c.shots ? (
+            <div className={`cm-stage${c.shots || c.video ? " has-shots" : ""}`}>
+              {c.video ? (
+                <>
+                  <HoverVideo video={c.video} className="cm-video" />
+                  <span className="cm-scan" />
+                  <span className="cm-cap">
+                    FIELD MEDIA <b>· live capture</b>
+                  </span>
+                </>
+              ) : c.shots ? (
                 <>
                   <div className="cm-shots">
                     {c.shots.map((s, si) => (

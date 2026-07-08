@@ -10,6 +10,17 @@ export interface CaseShot {
   height: number;
 }
 
+/** Short, silent, looped screen capture (h264 .mp4 + poster). Plays
+ *  on pointer-enter / focus; static poster on touch + reduced motion.
+ *  Drop files in /public and fill these to replace placeholders. */
+export interface CaseVideo {
+  src: string;
+  poster: string;
+  width: number;
+  height: number;
+  label: string;
+}
+
 export interface CaseLinks {
   github?: string;
   live?: string;
@@ -23,9 +34,20 @@ export interface CaseMeta {
   status: string;
 }
 
+/** Optional structured case-study sections (Problem / Approach /
+ *  Key decisions / Result). Only rendered when filled in — no
+ *  generated filler copy. */
+export interface CaseSections {
+  problem?: string;
+  approach?: string;
+  decisions?: string;
+  result?: string;
+}
+
 export interface CaseFile {
   feature?: boolean;
   id: string;
+  slug: string;
   cls: string;
   title: string;
   tech: string[];
@@ -36,12 +58,15 @@ export interface CaseFile {
   media?: string;
   mediaUrl?: string;
   shots?: CaseShot[];
+  video?: CaseVideo;
+  sections?: CaseSections;
 }
 
 export const CASES: CaseFile[] = [
   {
     feature: true,
     id: "CF-00 // PRIORITY",
+    slug: "flurter",
     cls: "CLASSIFIED",
     title: "Flurter",
     tech: ["Flutter", "Dart", "Riverpod", "go_router", "ML Kit OCR"],
@@ -59,6 +84,7 @@ export const CASES: CaseFile[] = [
   },
   {
     id: "CF-01",
+    slug: "property-pulse",
     cls: "CLASSIFIED",
     title: "Property Pulse",
     tech: ["Next.js 16", "MongoDB", "Mapbox", "Cloudinary", "OAuth"],
@@ -69,6 +95,7 @@ export const CASES: CaseFile[] = [
   },
   {
     id: "CF-02",
+    slug: "prostore",
     cls: "CLASSIFIED",
     title: "ProStore",
     tech: ["Next.js 16", "TypeScript", "Prisma", "PostgreSQL", "NextAuth"],
@@ -79,6 +106,7 @@ export const CASES: CaseFile[] = [
   },
   {
     id: "CF-03",
+    slug: "colorpicker",
     cls: "CLASSIFIED",
     title: "Colorpicker",
     tech: ["JavaScript", "OOP", "SCSS"],
