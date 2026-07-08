@@ -8,6 +8,7 @@ import { buildPost, GATE_COMMANDS, lsProjects, RESUME_PATH, UNLOCK_KEY } from "@
 import { readSessionValue, writeSessionValue } from "@/lib/hooks/useSessionFlag";
 import { SESSION_LANG_KEY } from "@/lib/i18n";
 import { sfx } from "@/lib/sfx";
+import { useLang } from "@/components/LangProvider";
 
 const html = () => document.documentElement;
 
@@ -19,6 +20,7 @@ const html = () => document.documentElement;
    gate entirely; without JS it never shows.
    ============================================================ */
 export function TerminalGate() {
+  const { lang } = useLang();
   const [lines, setLines] = useState<LogLine[]>([]);
   const [bar, setBar] = useState<string | null>(null);
   const [typed, setTyped] = useState("");
@@ -199,7 +201,9 @@ export function TerminalGate() {
   useEffect(() => {
     reduce.current = matchMedia("(prefers-reduced-motion: reduce)").matches;
     coarse.current = matchMedia("(hover:none),(pointer:coarse)").matches;
-    nl.current = readSessionValue(SESSION_LANG_KEY) === "nl";
+    /* session toggle wins; otherwise boot in the route's language (/nl → nl) */
+    const storedLang = readSessionValue(SESSION_LANG_KEY);
+    nl.current = (storedLang === "nl" || storedLang === "en" ? storedLang : lang) === "nl";
 
     const forceReplay = /(^|#)(gate|replay|boot)$/i.test(location.hash);
     if (forceReplay) {

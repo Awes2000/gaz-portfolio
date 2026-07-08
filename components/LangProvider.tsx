@@ -18,10 +18,18 @@ const LangContext = createContext<LangContextValue>({
   t: (key) => translate(key, "en"),
 });
 
-export function LangProvider({ children }: { children: React.ReactNode }) {
-  /* server snapshot is always EN; the stored session language is
-     adopted right after hydration via the external store */
-  const lang = useSyncExternalStore(langStore.subscribe, langStore.getSnapshot, langStore.getServerSnapshot);
+interface LangProviderProps {
+  /** Route-level default: "/" renders en, "/nl" renders nl on the server. */
+  initial?: Lang;
+  children: React.ReactNode;
+}
+
+export function LangProvider({ initial = "en", children }: LangProviderProps) {
+  /* the server snapshot is the route's language, so each URL is
+     crawlable in its own language; a session toggle wins on the client */
+  const getSnapshot = useCallback((): Lang => langStore.getStored() ?? initial, [initial]);
+  const getServerSnapshot = useCallback((): Lang => initial, [initial]);
+  const lang = useSyncExternalStore(langStore.subscribe, getSnapshot, getServerSnapshot);
 
   /* sync the document language + notify non-React listeners */
   useEffect(() => {
@@ -30,10 +38,10 @@ export function LangProvider({ children }: { children: React.ReactNode }) {
   }, [lang]);
 
   const setLang = useCallback((l: Lang) => {
-    if (l === langStore.getSnapshot()) return;
+    if (l === (langStore.getStored() ?? initial)) return;
     langStore.set(l);
     sfx.click();
-  }, []);
+  }, [initial]);
 
   const value = useMemo<LangContextValue>(
     () => ({ lang, setLang, t: (key) => translate(key, lang) }),

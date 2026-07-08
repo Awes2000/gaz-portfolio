@@ -1,47 +1,18 @@
-import { Suspense } from "react";
-import { About } from "@/components/About";
-import { CaseFiles } from "@/components/CaseFiles";
-import { CommandPalette } from "@/components/CommandPalette";
-import { Contact } from "@/components/Contact";
-import { Footer } from "@/components/Footer";
-import { Hero } from "@/components/Hero";
-import { Hud } from "@/components/Hud";
-import { RippleCanvas } from "@/components/RippleCanvas";
-import { ScannerCursor } from "@/components/ScannerCursor";
-import { Shell } from "@/components/Shell";
-import { TerminalGate } from "@/components/TerminalGate";
+import type { Metadata } from "next";
+import { LangProvider } from "@/components/LangProvider";
+import { Portfolio } from "@/components/Portfolio";
 
-/* Server component. All real content below is server-rendered HTML;
-   the terminal gate is a client overlay on top of it, not a content
-   wall — SEO and screen readers see the full page without JS.
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "/",
+    languages: { en: "/", nl: "/nl", "x-default": "/" },
+  },
+};
 
-   Suspense boundaries let React 19 hydrate below-the-fold sections
-   selectively (smaller main-thread tasks, lower TBT) without
-   changing the server-rendered output. */
 export default function Page() {
   return (
-    <>
-      <RippleCanvas />
-      <ScannerCursor />
-      <TerminalGate />
-      <Hud />
-      <main id="app">
-        <Hero />
-        <Suspense>
-          <About />
-        </Suspense>
-        <Suspense>
-          <CaseFiles />
-        </Suspense>
-        <Suspense>
-          <Contact />
-          <Footer />
-        </Suspense>
-      </main>
-      <Suspense>
-        <Shell />
-        <CommandPalette />
-      </Suspense>
-    </>
+    <LangProvider initial="en">
+      <Portfolio />
+    </LangProvider>
   );
 }

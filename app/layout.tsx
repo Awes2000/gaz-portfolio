@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Roboto_Mono, Roboto_Slab } from "next/font/google";
-import { LangProvider } from "@/components/LangProvider";
+import { JsonLd } from "@/components/JsonLd";
 import "./globals.css";
 
 const robotoSlab = Roboto_Slab({
@@ -28,7 +28,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Gabriël Awes Zoretić · Secure System",
+  title: "Gabriël Awes Zoretić · Full-stack developer, Amsterdam",
   description:
     "Full-stack developer in Amsterdam with a front-end and design edge. Next.js-focused, now going deep on cybersecurity, cloud and Linux. Open to freelance front-end and collaborations.",
   authors: [{ name: "Gabriël Awes Zoretić" }],
@@ -64,10 +64,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: PREPAINT_SCRIPT }} />
+        <JsonLd />
       </head>
-      <body className={`${robotoSlab.variable} ${inter.variable} ${robotoMono.variable}`}>
-        <LangProvider>{children}</LangProvider>
-      </body>
+      <body className={`${robotoSlab.variable} ${inter.variable} ${robotoMono.variable}`}>{children}</body>
     </html>
   );
 }
