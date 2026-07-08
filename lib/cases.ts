@@ -6,6 +6,8 @@
 export interface CaseShot {
   src: string;
   alt: string;
+  width: number;
+  height: number;
 }
 
 export interface CaseLinks {
@@ -50,9 +52,9 @@ export const CASES: CaseFile[] = [
     media: "FLUTTER · PWA",
     mediaUrl: "app.aixwings.nl · graduation project",
     shots: [
-      { src: "/flutter-focus.jpg", alt: "Focus timer screen with pomodoro sessions" },
-      { src: "/flutter-home.jpg", alt: "Home screen with week planner and study plan" },
-      { src: "/flutter-taken.jpg", alt: "Tasks screen with AI quiz generation" },
+      { src: "/flutter-focus.jpg", alt: "Focus timer screen with pomodoro sessions", width: 480, height: 870 },
+      { src: "/flutter-home.jpg", alt: "Home screen with week planner and study plan", width: 480, height: 865 },
+      { src: "/flutter-taken.jpg", alt: "Tasks screen with AI quiz generation", width: 480, height: 868 },
     ],
   },
   {

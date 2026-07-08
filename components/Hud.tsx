@@ -238,13 +238,7 @@ export function Hud() {
               <LinkedinIcon />
               LinkedIn
             </a>
-            <button
-              className="m-soc m-snd"
-              id="m-snd"
-              aria-pressed={sndOn}
-              aria-label={`UI sound, ${sndOn ? "on" : "off"}`}
-              onClick={() => sfx.toggle()}
-            >
+            <button className="m-soc m-snd" id="m-snd" aria-pressed={sndOn} onClick={() => sfx.toggle()}>
               {sndOn ? "◆ sound" : "◇ sound"}
             </button>
             <LangToggle className="m-lang" />

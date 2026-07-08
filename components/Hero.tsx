@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "motion/react";
 import { useLang } from "@/components/LangProvider";
@@ -135,7 +136,7 @@ export function Hero() {
               </span>
             ))}
           </h1>
-          <p className="hero-type" id="hero-type" aria-label="Intro">
+          <p className="hero-type" id="hero-type">
             <span className="txt">{typed}</span>
             {!reduce && <span className="car" />}
           </p>
@@ -158,8 +159,7 @@ export function Hero() {
             </div>
             <div className="hc-body">
               <div className="hc-portrait">
-                {/* eslint-disable-next-line @next/next/no-img-element -- ported 1:1; CSS sizes it */}
-                <img src="/headshot.jpg" alt="Gabriël Awes Zoretić" />
+                <Image src="/headshot.jpg" alt="Gabriël Awes Zoretić" width={1365} height={2048} sizes="140px" priority />
                 <span className="hc-scan" />
                 <span className="hc-pframe" />
               </div>

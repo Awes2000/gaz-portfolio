@@ -1,25 +1,23 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { T } from "@/components/T";
+import { GateOverlays, makeRBars, type RBar } from "@/components/GateOverlays";
+import { GateScreen, type LogLine } from "@/components/GateScreen";
 import { dispatchAccess, ripple } from "@/lib/bus";
 import { buildPost, GATE_COMMANDS, lsProjects, RESUME_PATH, UNLOCK_KEY } from "@/lib/gate";
 import { readSessionValue, writeSessionValue } from "@/lib/hooks/useSessionFlag";
 import { SESSION_LANG_KEY } from "@/lib/i18n";
 import { sfx } from "@/lib/sfx";
-import { useSfxEnabled } from "@/lib/hooks/useSfxEnabled";
-
-interface LogLine {
-  html: string;
-  cls: string;
-}
-
-interface RBar {
-  left: number; top: number; width: number; height: number; delay: string;
-}
 
 const html = () => document.documentElement;
 
+/* ============================================================
+   TERMINAL UNLOCK GATE — ported 1:1 from js/boot.js. The real
+   portfolio is server-rendered in the DOM, blurred + redacted
+   behind this client overlay. A command (or Enter / UNLOCK)
+   decrypts it. Reduced motion or an unlocked session skips the
+   gate entirely; without JS it never shows.
+   ============================================================ */
 export function TerminalGate() {
   const [lines, setLines] = useState<LogLine[]>([]);
   const [bar, setBar] = useState<string | null>(null);
@@ -28,7 +26,7 @@ export function TerminalGate() {
   const [hidden, setHidden] = useState(false);
   const [gone, setGone] = useState(false);
   const [bars, setBars] = useState<RBar[]>([]);
-  const sndOn = useSfxEnabled();
+  const [powering, setPowering] = useState(true);
 
   const logRef = useRef<HTMLDivElement>(null);
   const crtRef = useRef<HTMLDivElement>(null);
@@ -39,7 +37,6 @@ export function TerminalGate() {
   const coarse = useRef(false);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
   const intervals = useRef<ReturnType<typeof setInterval>[]>([]);
-  const [powering, setPowering] = useState(true);
 
   const later = useCallback((fn: () => void, ms: number) => {
     timers.current.push(setTimeout(fn, ms));
@@ -189,6 +186,15 @@ export function TerminalGate() {
     }
   }, [line, reveal]);
 
+  const enterOrAutoType = useCallback(
+    (value: string) => {
+      if (done.current) return;
+      if (value.trim() === "") autoType("sudo access-portfolio", () => later(() => run("sudo access-portfolio"), 160));
+      else run(value);
+    },
+    [autoType, later, run],
+  );
+
   /* ---------- boot sequence (runs once, mirrors js/boot.js) ---------- */
   useEffect(() => {
     reduce.current = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -219,20 +225,7 @@ export function TerminalGate() {
       return;
     }
 
-    /* redaction bars (staggered L→R wipe) */
-    setBars(
-      Array.from({ length: 16 }, () => {
-        const left = Math.random() * 70 + 4;
-        return {
-          left,
-          top: Math.random() * 88 + 4,
-          width: Math.random() * 22 + 8,
-          height: 10 + Math.random() * 8,
-          delay: ((left / 90) * 0.45).toFixed(3) + "s",
-        };
-      }),
-    );
-
+    setBars(makeRBars()); // redaction bars (staggered L→R wipe)
     later(() => setPowering(false), 560);
     buildPost(nl.current).forEach(([content, cls, delay]) => later(() => line(content, cls), 420 + delay));
     later(() => {
@@ -280,128 +273,25 @@ export function TerminalGate() {
 
   return (
     <>
-      {/* redaction layer over the blurred portfolio */}
-      <div id="redact" aria-hidden="true" style={gone ? { opacity: 0, pointerEvents: "none", display: "none" } : undefined}>
-        <div className="rbars" id="rbars">
-          {bars.map((b, i) => (
-            <span
-              key={i}
-              className="rbar"
-              style={{
-                left: b.left + "vw",
-                top: b.top + "vh",
-                width: b.width + "vw",
-                height: b.height + "px",
-                transitionDelay: b.delay,
-              }}
-            />
-          ))}
-        </div>
-        <span className="stamp s1">Classified</span>
-        <span className="stamp s2">Redacted</span>
-        <span className="stamp s3">Eyes Only</span>
-      </div>
-
-      {/* TV static (cheap animated SVG turbulence, tinted steel) */}
-      <div id="static-noise" aria-hidden="true">
-        <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-          <filter id="tvnoise" x="0" y="0" width="100%" height="100%">
-            <feTurbulence type="fractalNoise" baseFrequency="0.82" numOctaves="2" stitchTiles="stitch" seed="3" result="n">
-              <animate attributeName="seed" values="3;19;7;26;3" dur="0.7s" repeatCount="indefinite" calcMode="discrete" />
-            </feTurbulence>
-            <feColorMatrix in="n" type="matrix" values="0 0 0 0 0.56  0 0 0 0 0.65  0 0 0 0 0.78  0 0 0 0.9 0" />
-          </filter>
-          <rect width="100%" height="100%" filter="url(#tvnoise)" />
-        </svg>
-      </div>
-
-      {/* CRT terminal */}
-      <div id="gate" className={gone ? "gone" : undefined} role="dialog" aria-label="Terminal access gate" aria-modal="true">
-        <div className={`crt-screen${powering ? " powering" : ""}`} id="crt-screen" ref={crtRef}>
-          <div className="crt-poweron" />
-          <div className="crt-content">
-            <a
-              href="#hero"
-              className="gate-skip"
-              id="gate-skip"
-              onClick={(e) => {
-                e.preventDefault();
-                skipNow();
-              }}
-            >
-              <T k="gate.skip" />
-            </a>
-            <div className="gate-bar">
-              <span>GABRIEL-OS</span>
-              <span>SECURE TERMINAL v4.0</span>
-            </div>
-            <div className="gate-log" id="gate-log" aria-live="polite" ref={logRef}>
-              {lines.map((l, i) => (
-                <div key={i} className={`ln${l.cls ? " " + l.cls : ""}`} dangerouslySetInnerHTML={{ __html: l.html }} />
-              ))}
-              {bar !== null && <div className="ln" dangerouslySetInnerHTML={{ __html: bar }} />}
-            </div>
-            <div
-              className="gate-prompt"
-              id="gate-prompt"
-              hidden={!promptVisible}
-              onClick={() => {
-                if (!done.current) inputRef.current?.focus();
-              }}
-            >
-              <span className="ps1">guest@gabriel-os:~$</span>
-              <span className="gate-input-wrap">
-                <span id="gate-typed">{typed}</span>
-                <span className="caret" id="gate-caret">█</span>
-              </span>
-              <input
-                id="gate-cmd"
-                ref={inputRef}
-                autoComplete="off"
-                autoCapitalize="off"
-                autoCorrect="off"
-                spellCheck={false}
-                aria-label="Type a terminal command"
-                onInput={(e) => setTyped((e.target as HTMLInputElement).value)}
-                onKeyDown={(e) => {
-                  if (done.current) return;
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    const v = (e.target as HTMLInputElement).value.trim();
-                    if (v === "") autoType("sudo access-portfolio", () => later(() => run("sudo access-portfolio"), 160));
-                    else run((e.target as HTMLInputElement).value);
-                  }
-                }}
-              />
-            </div>
-            <T as="p" className="gate-hint" k="gate.hint" hidden={!promptVisible} />
-            <button
-              className="gate-unlock"
-              id="gate-unlock"
-              hidden={!promptVisible}
-              onClick={() => {
-                if (done.current) return;
-                autoType("sudo access-portfolio", () => later(() => run("sudo access-portfolio"), 160));
-              }}
-            >
-              <T k="gate.unlock" />
-            </button>
-          </div>
-          <div className="zap-tear" />
-          <div className="crt-scanlines" />
-          <div className="crt-vignette" />
-          <div className="crt-flicker" />
-        </div>
-        <button
-          className="gate-sound"
-          id="gate-sound"
-          aria-pressed={sndOn}
-          aria-label={`Terminal sound, ${sndOn ? "on" : "off"}`}
-          onClick={() => sfx.toggle()}
-        >
-          {sndOn ? "◆ snd: on" : "◇ snd: off"}
-        </button>
-      </div>
+      <GateOverlays bars={bars} gone={gone} />
+      <GateScreen
+        powering={powering}
+        gone={gone}
+        lines={lines}
+        bar={bar}
+        typed={typed}
+        promptVisible={promptVisible}
+        crtRef={crtRef}
+        logRef={logRef}
+        inputRef={inputRef}
+        onSkip={skipNow}
+        onPromptClick={() => {
+          if (!done.current) inputRef.current?.focus();
+        }}
+        onInput={setTyped}
+        onEnter={enterOrAutoType}
+        onUnlock={() => enterOrAutoType("")}
+      />
     </>
   );
 }

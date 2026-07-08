@@ -68,12 +68,7 @@ export function Contact() {
         <a className="contact-cta" id="contact-cta" href={`mailto:${EMAIL}`}>
           <T k="contact.cta" />
         </a>
-        <button
-          className={`contact-copy-btn${copied ? " copied" : ""}`}
-          id="copy-email"
-          aria-label="Copy email address"
-          onClick={onCopy}
-        >
+        <button className={`contact-copy-btn${copied ? " copied" : ""}`} id="copy-email" onClick={onCopy}>
           {copied ? "> copied to clipboard" : t("contact.copybtn")}
         </button>
       </div>

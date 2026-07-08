@@ -79,10 +79,10 @@ export function ScrambleNum({ value }: { value: string }) {
 /* heading scramble glyphs, same set as js/shell.js */
 const GLYPH = "#$%&/<>[]{}=+*01";
 
-/** Section title: i18n text + underline draw + decrypt-scramble on enter. */
+/** Section title (real h2 for heading order): i18n text + underline draw + decrypt-scramble on enter. */
 export function ScrambleTitle({ k, underline = true }: { k: I18nKey; underline?: boolean }) {
   const { t } = useLang();
-  const ref = useRef<HTMLSpanElement>(null);
+  const ref = useRef<HTMLHeadingElement>(null);
   const inView = useInView(ref as React.RefObject<Element>, { once: true, amount: 0.6 });
   const reduce = useReducedMotion();
   const scrambled = useRef(false);
@@ -114,7 +114,7 @@ export function ScrambleTitle({ k, underline = true }: { k: I18nKey; underline?:
   }, [inView, reduce]);
 
   return (
-    <span
+    <h2
       ref={ref}
       className={`sec-title${underline ? ` underline-draw${inView ? " in" : ""}` : ""}`}
       dangerouslySetInnerHTML={{ __html: t(k) }}

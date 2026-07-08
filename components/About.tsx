@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Rise, ScrambleNum, ScrambleTitle, Wipe } from "@/components/motion/InView";
 import { T } from "@/components/T";
 import { Telemetry } from "@/components/Telemetry";
@@ -89,8 +90,13 @@ export function About() {
 
           <Rise as="aside" index={3}>
             <div className="portrait">
-              {/* eslint-disable-next-line @next/next/no-img-element -- ported 1:1; CSS sizes it */}
-              <img src="/headshot.jpg" alt="Gabriël Awes Zoretić" />
+              <Image
+                src="/headshot.jpg"
+                alt="Gabriël Awes Zoretić"
+                width={1365}
+                height={2048}
+                sizes="(max-width: 900px) 90vw, 340px"
+              />
               <span className="pframe" />
               <span className="scanline" />
               <span className="ptag">SUBJECT: G. AWES ZORETIĆ</span>

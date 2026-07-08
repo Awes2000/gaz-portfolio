@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { CaseCard } from "@/components/CaseCard";
@@ -15,8 +16,7 @@ function DetailBody({ c }: { c: CaseFile }) {
       {c.shots && (
         <div className="detail-shots">
           {c.shots.map((s) => (
-            // eslint-disable-next-line @next/next/no-img-element -- ported 1:1; CSS sizes it
-            <img key={s.src} src={s.src} alt={s.alt} loading="lazy" />
+            <Image key={s.src} src={s.src} alt={s.alt} width={s.width} height={s.height} sizes="240px" loading="lazy" />
           ))}
         </div>
       )}

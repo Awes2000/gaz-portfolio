@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRef, useState } from "react";
 import { useInView, useReducedMotion } from "motion/react";
 import { FolderIcon, GithubIcon, LinkIcon, PlayIcon } from "@/components/caseIcons";
@@ -115,8 +116,15 @@ export function CaseCard({ c, onOpen }: CaseCardProps) {
                 <>
                   <div className="cm-shots">
                     {c.shots.map((s, si) => (
-                      // eslint-disable-next-line @next/next/no-img-element -- ported 1:1; CSS sizes it
-                      <img key={s.src} src={s.src} alt={s.alt} className={`cm-shot cm-shot-${si}`} />
+                      <Image
+                        key={s.src}
+                        src={s.src}
+                        alt={s.alt}
+                        width={s.width}
+                        height={s.height}
+                        sizes="150px"
+                        className={`cm-shot cm-shot-${si}`}
+                      />
                     ))}
                   </div>
                   <span className="cm-scan" />

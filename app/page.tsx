@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { About } from "@/components/About";
 import { CaseFiles } from "@/components/CaseFiles";
 import { CommandPalette } from "@/components/CommandPalette";
@@ -12,7 +13,11 @@ import { TerminalGate } from "@/components/TerminalGate";
 
 /* Server component. All real content below is server-rendered HTML;
    the terminal gate is a client overlay on top of it, not a content
-   wall — SEO and screen readers see the full page without JS. */
+   wall — SEO and screen readers see the full page without JS.
+
+   Suspense boundaries let React 19 hydrate below-the-fold sections
+   selectively (smaller main-thread tasks, lower TBT) without
+   changing the server-rendered output. */
 export default function Page() {
   return (
     <>
@@ -22,13 +27,21 @@ export default function Page() {
       <Hud />
       <main id="app">
         <Hero />
-        <About />
-        <CaseFiles />
-        <Contact />
-        <Footer />
+        <Suspense>
+          <About />
+        </Suspense>
+        <Suspense>
+          <CaseFiles />
+        </Suspense>
+        <Suspense>
+          <Contact />
+          <Footer />
+        </Suspense>
       </main>
-      <Shell />
-      <CommandPalette />
+      <Suspense>
+        <Shell />
+        <CommandPalette />
+      </Suspense>
     </>
   );
 }

@@ -234,7 +234,7 @@ export function Shell() {
           <button id="sb-help" className="sb-help" aria-label="Keyboard shortcuts" title="Keyboard shortcuts" onClick={() => setShortcutsOpen(true)}>
             [?]
           </button>
-          <button id="sb-sfx" className="sb-sfx" aria-pressed={sndOn} aria-label={`UI sound, ${sndOn ? "on" : "off"}`} onClick={() => sfx.toggle()}>
+          <button id="sb-sfx" className="sb-sfx" aria-pressed={sndOn} title="UI sound" onClick={() => sfx.toggle()}>
             {sndOn ? "◆ snd" : "◇ snd"}
           </button>
           <button id="sb-term" className="sb-term" aria-label="Open command terminal (⌘K)" title="Command terminal (⌘K / Ctrl-K)" onClick={() => shell.open()}>
