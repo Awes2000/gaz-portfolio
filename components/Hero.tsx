@@ -57,6 +57,10 @@ export function Hero() {
   const time = useAmsterdamClock();
   const cardCmd = useCardCommand(reduce);
   const { typed, start } = useTypewriter(reduce);
+  /* the tagline is real SSR content: full text at rest (SEO, no-JS,
+     reduced motion), and the unlock beat re-types it over itself */
+  const [typing, setTyping] = useState(false);
+  const tagline = typing ? typed : t("hero.type");
   const wrapRef = useRef<HTMLElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
@@ -83,10 +87,14 @@ export function Hero() {
     };
   }, []);
 
-  /* typewriter starts after intro; re-types when the language changes */
+  /* typewriter starts after intro; re-types when the language changes.
+     With reduced motion the full text stays put: no clear, no retype. */
   useEffect(() => {
-    if (!introd) return;
-    const id = setTimeout(() => start(t("hero.type")), reduce ? 0 : 520);
+    if (!introd || reduce) return;
+    const id = setTimeout(() => {
+      setTyping(true);
+      start(t("hero.type"));
+    }, 520);
     return () => clearTimeout(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [introd, lang]);
@@ -151,12 +159,16 @@ export function Hero() {
             ))}
           </h1>
           <p className="hero-type" id="hero-type">
-            <span className="txt">{typed}</span>
+            <span className="txt">{tagline}</span>
             {!reduce && <span className="car" />}
           </p>
           <div className={riseClass("hero-cta-row")} style={riseDelay(1)}>
-            <a className="link-mono" href="https://github.com/Awes2000" target="_blank" rel="noopener noreferrer">
+            <a className="btn-primary" href="#projects">
+              <T k="hero.viewwork" />
+            </a>
+            <a className="btn-ghost" href="https://github.com/Awes2000" target="_blank" rel="noopener noreferrer">
               <T k="hero.viewgh" />
+              <span aria-hidden="true">↗</span>
             </a>
           </div>
           <div className={riseClass("")} style={riseDelay(2)}>

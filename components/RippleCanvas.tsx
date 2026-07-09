@@ -26,7 +26,7 @@ float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<5;i++){v+=a*noise(p);p*=2.02;a*=
 void main(){
   vec2 uv=gl_FragCoord.xy/u_res.xy;
   vec2 p=uv*vec2(u_res.x/u_res.y,1.0)*2.2;
-  float t=u_time*0.045;
+  float t=u_time*0.055;
   vec2 q=vec2(fbm(p+t),fbm(p+vec2(5.2,1.3)-t));
   vec2 r=vec2(fbm(p+2.0*q+vec2(1.7,9.2)+t*0.7),fbm(p+2.0*q+vec2(8.3,2.8)-t*0.6));
   float f=fbm(p+3.0*r);
@@ -35,9 +35,11 @@ void main(){
   float swell=u_str*smoothstep(0.40,0.0,md);
   f+=swell*0.40 + u_audio*0.10;
   vec3 navy=vec3(0.039,0.098,0.184);
+  vec3 deep=vec3(0.024,0.063,0.125);
   vec3 steel=vec3(0.145,0.205,0.315);
-  float shade=smoothstep(0.22,0.96,f);
+  float shade=smoothstep(0.16,0.98,f);
   vec3 col=mix(navy,steel,shade*0.85);
+  col=mix(col,deep,pow(1.0-shade,3.0)*0.5);
   col+=steel*pow(shade,2.5)*0.16*(0.7+swell);
   float d=distance(uv,vec2(0.5,0.46));
   col*=1.0-0.34*d*d;
@@ -216,5 +218,14 @@ export function RippleCanvas() {
     };
   }, [reduce]);
 
-  return <canvas id="ripple" ref={canvasRef} aria-hidden="true" />;
+  /* depth stack above the water: a vertical luminance scrim grounds
+     the HUD and footer, a static monochrome grain gives the surface
+     tooth and kills gradient banding. Both are pure CSS, no frames. */
+  return (
+    <>
+      <canvas id="ripple" ref={canvasRef} aria-hidden="true" />
+      <div className="bg-scrim" aria-hidden="true" />
+      <div className="bg-grain" aria-hidden="true" />
+    </>
+  );
 }

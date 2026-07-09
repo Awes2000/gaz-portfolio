@@ -17,11 +17,12 @@ export const DICT = {
 
   /* hero */
   "hero.kicker": { en: "Full-stack developer · Next.js · moving into cybersecurity &amp; cloud", nl: "Full-stack developer · Next.js · op weg naar cybersecurity &amp; cloud" },
-  "hero.type": { en: "I build clean, fast web apps and I'm learning to secure and run them.",
-    nl: "Ik bouw strakke, snelle webapps en leer ze te beveiligen en te draaien." },
+  "hero.type": { en: "I build clean, fast web apps and I'm learning to secure them.",
+    nl: "Ik bouw strakke, snelle webapps en ik leer ze te beveiligen." },
   "hero.featured": { en: "★ FEATURED", nl: "★ UITGELICHT" },
   "hero.flutter": { en: "Flurter · live app", nl: "Flurter · live app" },
-  "hero.viewgh": { en: "▶ View <b>GitHub</b>", nl: "▶ Bekijk <b>GitHub</b>" },
+  "hero.viewwork": { en: "View work", nl: "Bekijk werk" },
+  "hero.viewgh": { en: "GitHub", nl: "GitHub" },
 
   /* hero card */
   "hc.role": { en: "full-stack dev", nl: "full-stack dev" },
