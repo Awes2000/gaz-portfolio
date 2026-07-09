@@ -27,7 +27,7 @@ export function Telemetry() {
         <div className="tele-row"><T k="tele.k.focus" className="k" /><T k="tele.v.focus" className="v" /></div>
         <div className="tele-row"><T k="tele.k.open" className="k" /><T k="tele.v.open" className="v mint" /></div>
         <div className="tele-row"><T k="tele.k.time" className="k" /><span className="v" id="tele-time">{time}</span></div>
-        <div className="tele-row"><T k="tele.k.since" className="k" /><span className="v mint">2021</span></div>
+        <div className="tele-row"><T k="tele.k.since" className="k" /><span className="v mint">2022</span></div>
       </div>
     </div>
   );
