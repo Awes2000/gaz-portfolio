@@ -9,6 +9,7 @@ import { Hud } from "@/components/Hud";
 import { SonarCanvas } from "@/components/SonarCanvas";
 import { ScannerCursor } from "@/components/ScannerCursor";
 import { Shell } from "@/components/Shell";
+import { SmoothScroll } from "@/components/SmoothScroll";
 import { TerminalGate } from "@/components/TerminalGate";
 
 /* Server component shared by / (en) and /nl. All real content is
@@ -22,6 +23,7 @@ import { TerminalGate } from "@/components/TerminalGate";
 export function Portfolio() {
   return (
     <>
+      <SmoothScroll />
       <SonarCanvas />
       <ScannerCursor />
       <TerminalGate />
