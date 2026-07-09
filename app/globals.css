@@ -936,10 +936,6 @@ footer{border-top:1px solid rgba(100,255,218,.12);margin-top:40px}
 html.demo #crtmode{opacity:1}
 html.demo #app{filter:saturate(1.1) contrast(1.05)}
 
-/* idle terminal screensaver */
-#screensaver{position:fixed;inset:0;z-index:7000;pointer-events:none;opacity:0;
-  background:#040810;transition:opacity .6s var(--ease);display:block}
-#screensaver.on{opacity:1;pointer-events:auto}
 
 /* persistent status bar */
 #shell-bar{position:fixed;left:0;right:0;bottom:0;z-index:1500;height:34px;
@@ -1098,7 +1094,7 @@ html.locked #shell-bar{transform:translateY(120%)}
 @media (prefers-reduced-motion:reduce){
   #grain{animation:none}
   .sb-caret,.sb-sig i:nth-child(4){animation:none}
-  #sweep,#screensaver{display:none!important}
+  #sweep{display:none!important}
 }
 
 /* ============================================================
@@ -1205,10 +1201,8 @@ html.locked #shell-bar{transform:translateY(120%)}
 #hero{display:block;padding:0;min-height:0}
 .hero-sticky{min-height:100vh;min-height:100svh;display:flex;align-items:center;
   padding:96px 0 84px;position:relative;width:100%}
-@media (min-width:921px) and (prefers-reduced-motion:no-preference){
-  #hero{min-height:185svh}
-  .hero-sticky{position:sticky;top:0;min-height:100svh}
-}
+/* hero is a single clean viewport; no long pin (it read as dead
+   scroll). The fade/scale beat still plays as the hero scrolls out. */
 
 /* ============================================================
    ROUTE CURTAIN + PROOF STRIP

@@ -8,7 +8,6 @@ import { useIdleSignal } from "@/lib/hooks/useIdleSignal";
 import { useSfxEnabled } from "@/lib/hooks/useSfxEnabled";
 import { SECTION_PATHS } from "@/lib/shellCommands";
 import { sfx, SFX_INTERACTIVE } from "@/lib/sfx";
-import { useScreensaver } from "@/lib/hooks/useScreensaver";
 
 const KONAMI = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"];
 const AFK = ["[afk] gabriel-os", "connection idle...", "> session backgrounded"];
@@ -24,10 +23,7 @@ export function Shell() {
   const [toastHtml, setToastHtml] = useState<string | null>(null);
   const sweepRef = useRef<HTMLDivElement>(null);
   const grainRef = useRef<HTMLDivElement>(null);
-  const saverRef = useRef<HTMLCanvasElement>(null);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useScreensaver(saverRef, reduce);
 
   /* egg toast host (footer egg, konami, logo glitch all print here) */
   useEffect(
@@ -206,7 +202,6 @@ export function Shell() {
       <div id="grain" ref={grainRef} aria-hidden="true" />
       <div id="sweep" ref={sweepRef} aria-hidden="true" />
       <div id="crtmode" aria-hidden="true" />
-      <canvas id="screensaver" ref={saverRef} aria-hidden="true" />
       <div id="powerdown" aria-hidden="true">
         <span className="pd-line" />
       </div>

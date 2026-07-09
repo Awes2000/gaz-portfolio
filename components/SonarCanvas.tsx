@@ -29,7 +29,9 @@ export function SonarCanvas() {
     }
 
     const ctx = canvas.getContext("2d", { alpha: false });
-    if (!ctx) {
+    // a clean single sweep needs an angular (conic) gradient; without
+    // it, fall back to the still grain + vignette rather than fake it
+    if (!ctx || typeof ctx.createConicGradient !== "function") {
       document.documentElement.classList.add("rm-static");
       return;
     }
@@ -59,10 +61,8 @@ export function SonarCanvas() {
 
     /* pointer: the sweep centre eases a little toward the cursor,
        and a faint glow marks it. Mouse only (touch keeps it centred). */
-    let hasPointer = false;
     const onMove = (e: PointerEvent) => {
       if (e.pointerType && e.pointerType !== "mouse") return;
-      hasPointer = true;
       const nx = e.clientX / innerWidth - 0.5;
       const ny = e.clientY / innerHeight - 0.5;
       tcx = W / 2 + nx * W * 0.22;
@@ -122,53 +122,33 @@ export function SonarCanvas() {
       cx += (tcx - cx) * 0.06;
       cy += (tcy - cy) * 0.06;
 
-      const intensity = Math.min(1, 0.55 + audio * 0.5 + scrollBoost * 0.7 + flare);
+      const intensity = audio * 0.5 + scrollBoost * 0.8 + flare;
       angle = (angle + OMEGA * step * (1 + scrollBoost * 1.4 + flare * 0.8)) % TWO_PI;
 
-      // decay the previous frame toward navy: this is the sweep trail
+      // clear to navy every frame: no accumulation, so no ring banding
       ctx.globalCompositeOperation = "source-over";
-      ctx.fillStyle = "rgba(10,25,47,0.05)";
+      ctx.fillStyle = "#0a192f";
       ctx.fillRect(0, 0, W, H);
 
-      const R = Math.hypot(W, H);
+      // one soft sweep: a conic gradient wedge, bright at the leading
+      // edge and fading over ~55 degrees of trail. Near-invisible at
+      // rest; a touch brighter with scroll, cursor drift and unlock.
+      const beam = 0.05 + intensity * 0.12;
+      const conic = ctx.createConicGradient(angle, cx, cy);
+      conic.addColorStop(0, `rgba(100,255,218,${beam.toFixed(3)})`);
+      conic.addColorStop(0.15, "rgba(100,255,218,0)");
+      conic.addColorStop(1, "rgba(100,255,218,0)");
       ctx.globalCompositeOperation = "lighter";
+      ctx.fillStyle = conic;
+      ctx.fillRect(0, 0, W, H);
 
-      // the sweep beam: a thin wedge with a gradient fading to the rim
-      ctx.save();
-      ctx.translate(cx, cy);
-      ctx.rotate(angle);
-      const beam = 0.12 + intensity * 0.1; // peak alpha, still faint
-      const g = ctx.createLinearGradient(0, 0, R, 0);
-      g.addColorStop(0, `rgba(100,255,218,${(beam * 0.5).toFixed(3)})`);
-      g.addColorStop(0.55, `rgba(100,255,218,${beam.toFixed(3)})`);
-      g.addColorStop(1, "rgba(100,255,218,0)");
-      ctx.fillStyle = g;
-      const half = 0.02;
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.arc(0, 0, R, -half, half);
-      ctx.closePath();
-      ctx.fill();
-      // a brighter leading edge line for the "just swept" glint
-      const lg = ctx.createLinearGradient(0, 0, R, 0);
-      lg.addColorStop(0, `rgba(180,255,238,${(beam * 0.5).toFixed(3)})`);
-      lg.addColorStop(1, "rgba(100,255,218,0)");
-      ctx.strokeStyle = lg;
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.lineTo(R, 0);
-      ctx.stroke();
-      ctx.restore();
-
-      // faint glow marking the cursor-driven centre
-      if (hasPointer) {
-        const cg = ctx.createRadialGradient(cx, cy, 0, cx, cy, R * 0.18);
-        cg.addColorStop(0, "rgba(100,255,218,0.05)");
-        cg.addColorStop(1, "rgba(100,255,218,0)");
-        ctx.fillStyle = cg;
-        ctx.fillRect(0, 0, W, H);
-      }
+      // keep the very centre clean where all angles converge
+      ctx.globalCompositeOperation = "source-over";
+      const core = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.min(W, H) * 0.06);
+      core.addColorStop(0, "#0a192f");
+      core.addColorStop(1, "rgba(10,25,47,0)");
+      ctx.fillStyle = core;
+      ctx.fillRect(0, 0, W, H);
 
       rafId = requestAnimationFrame(draw);
     };

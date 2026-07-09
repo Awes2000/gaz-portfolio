@@ -1,0 +1,382 @@
+- generic [ref=e1]:
+  - banner [ref=e54]:
+    - generic [ref=e56]:
+      - link "Home" [ref=e57]:
+        - /url: "#hero"
+        - img [ref=e59]
+        - generic [ref=e62]:
+          - text: AWES ZORETIĆ
+          - text: // full-stack → cybersecurity & cloud
+      - navigation "Primary" [ref=e63]:
+        - link "01.About" [ref=e64]:
+          - /url: "#about"
+        - link "02.Projects" [ref=e65]:
+          - /url: "#projects"
+        - link "03.Contact" [ref=e66]:
+          - /url: "#contact"
+        - link "04.Resume" [ref=e67]:
+          - /url: /files/awes_resume_updated.pdf
+      - generic [ref=e69]:
+        - generic "Language" [ref=e70]:
+          - button "EN" [pressed] [ref=e71]
+          - button "NL" [ref=e72]
+        - link "GitHub" [ref=e73]:
+          - /url: https://github.com/Awes2000
+          - img [ref=e74]
+        - link "LinkedIn" [ref=e76]:
+          - /url: https://www.linkedin.com/in/gabri%C3%ABl-awes-z-8105b5193/
+          - img [ref=e77]
+        - button "Toggle ambient audio" [ref=e79]:
+          - img [ref=e80]
+  - text: ▌
+  - main [ref=e83]:
+    - generic [ref=e85]:
+      - generic [ref=e86]:
+        - generic [ref=e87]:
+          - generic [ref=e88]: Full-stack developer · Next.js · moving into cybersecurity & cloud
+          - heading "Gabriël Awes Zoretić." [active] [level=1] [ref=e89]:
+            - generic [ref=e92]: Gabriël
+            - generic [ref=e95]: Awes
+            - generic [ref=e98]: Zoretić.
+          - paragraph [ref=e99]: I build clean, fast web apps and I'm learning to secure them.
+          - generic [ref=e101]:
+            - link "View work" [ref=e102]:
+              - /url: "#projects"
+              - generic [ref=e103]: View work
+            - link "GitHub" [ref=e104]:
+              - /url: https://github.com/Awes2000
+              - generic [ref=e105]: GitHub
+              - generic [ref=e106]: ↗
+        - complementary [ref=e107]:
+          - generic [ref=e108]:
+            - generic [ref=e109]:
+              - generic [ref=e111]: whoami.sh
+              - generic [ref=e112]: LIVE
+            - generic [ref=e114]:
+              - img "Gabriël Awes Zoretić" [ref=e116]
+              - generic [ref=e118]:
+                - generic [ref=e119]:
+                  - generic [ref=e120]: user
+                  - generic [ref=e121]: gabriël_awes_zoretić
+                - generic [ref=e122]:
+                  - generic [ref=e123]: role
+                  - generic [ref=e124]: full-stack dev
+                - generic [ref=e125]:
+                  - generic [ref=e126]: loc
+                  - generic [ref=e127]: Amsterdam, NL
+                - generic [ref=e128]:
+                  - generic [ref=e129]: time
+                  - generic [ref=e130]: 15:27:36
+                - generic [ref=e131]:
+                  - generic [ref=e132]: focus
+                  - generic [ref=e133]: cybersec · cloud · Linux
+                - generic [ref=e134]:
+                  - generic [ref=e135]: status
+                  - generic [ref=e136]: employed + enrolled
+            - generic [ref=e138]:
+              - text: guest@gabriel-os:~$ ls ~/ski
+              - generic [ref=e139]: █
+      - link "Scroll to about" [ref=e140]:
+        - /url: "#about"
+        - generic [ref=e141]: scroll
+        - generic [ref=e142]: ▾
+    - generic [ref=e144]:
+      - generic [ref=e145]:
+        - generic [ref=e146]: "01."
+        - heading "About & status" [level=2] [ref=e147]
+      - generic [ref=e149]:
+        - generic [ref=e150]:
+          - paragraph [ref=e151]: "I'm a full-stack developer who plans and orchestrates: clean design, fluid interfaces, and software that does what the client actually asked for. I start by getting concrete with people about what they want, then I architect it and build toward that, not around it."
+          - paragraph [ref=e152]: "I learned the craft by hand. My first years were straight programming, things like a color picker and a text-based minigame I wrote from scratch in Python. Projects I'm still fond of, because they're where the fundamentals stuck. Over my later years AI became a core part of how I work, and because I know what's underneath, I use it as an architect rather than a crutch: I understand the system first, then orchestrate the build."
+          - paragraph [ref=e153]: "I'm a perfectionist by nature. That shows up most in the design and in the value I deliver: I don't ship something that feels half-considered."
+          - paragraph [ref=e154]: From September 2026 I start the 4-year HBO-ICT Cyber Security & Cloud duaal at Hogeschool Utrecht while working at H2B IT Solutions, on the operations side. The goal is to be the developer who ships and understands what happens after deploy. Growing toward Linux, Cloud Security, DevSecOps and GRC.
+          - paragraph [ref=e155]: "Three languages: Dutch (native), English (fluent), Serbo-Croatian (conversational)."
+          - generic [ref=e156]: guest@gabriel-os:~/skills$ ls -la
+          - generic [ref=e157]:
+            - generic [ref=e158]:
+              - heading "drwxr-xr-x building/ confident" [level=4] [ref=e159]:
+                - generic [ref=e160]: drwxr-xr-x
+                - generic [ref=e161]: building/
+                - generic [ref=e162]: confident
+              - list [ref=e163]:
+                - listitem [ref=e164]: Next.js
+                - listitem [ref=e165]: React
+                - listitem [ref=e166]: JavaScript ES6+
+                - listitem [ref=e167]: HTML5
+                - listitem [ref=e168]: SCSS / CSS3
+                - listitem [ref=e169]: Tailwind
+                - listitem [ref=e170]: UI/UX
+                - listitem [ref=e171]: Git / GitHub
+                - listitem [ref=e172]: Vercel
+            - generic [ref=e173]:
+              - heading "drwxr-xr-x working/ functional" [level=4] [ref=e174]:
+                - generic [ref=e175]: drwxr-xr-x
+                - generic [ref=e176]: working/
+                - generic [ref=e177]: functional
+              - list [ref=e178]:
+                - listitem [ref=e179]: TypeScript
+                - listitem [ref=e180]: Node.js
+                - listitem [ref=e181]: Express
+                - listitem [ref=e182]: Prisma
+                - listitem [ref=e183]: PostgreSQL
+                - listitem [ref=e184]: MongoDB
+                - listitem [ref=e185]: REST APIs
+                - listitem [ref=e186]: PHP / Laravel
+                - listitem [ref=e187]: Docker
+            - generic [ref=e188]:
+              - heading "drwx--x--x ai-native/ fluent" [level=4] [ref=e189]:
+                - generic [ref=e190]: drwx--x--x
+                - generic [ref=e191]: ai-native/
+                - generic [ref=e192]: fluent
+              - list [ref=e193]:
+                - listitem [ref=e194]: Claude Code
+                - listitem [ref=e195]: Claude Design
+                - listitem [ref=e196]: context engineering
+                - listitem [ref=e197]: GPT (imagery)
+                - listitem [ref=e198]: Google AI Stitch
+                - listitem [ref=e199]: architect-first orchestration
+            - generic [ref=e200]:
+              - heading "drw------- securing/ learning" [level=4] [ref=e201]:
+                - generic [ref=e202]: drw-------
+                - generic [ref=e203]: securing/
+                - generic [ref=e204]: learning
+              - list [ref=e205]:
+                - listitem [ref=e206]: Linux
+                - listitem [ref=e207]: Networking
+                - listitem [ref=e208]: Cloud infra
+                - listitem [ref=e209]: Hardening
+                - listitem [ref=e210]: Scripting
+                - listitem [ref=e211]: CompTIA / Google Cybersecurity
+          - generic [ref=e212]:
+            - generic [ref=e213]: // interests
+            - list [ref=e214]:
+              - listitem [ref=e215]: Cybersecurity·
+              - listitem [ref=e216]: Cloud·
+              - listitem [ref=e217]: Linux·
+              - listitem [ref=e218]: DevSecOps·
+              - listitem [ref=e219]: GRC·
+              - listitem [ref=e220]: AI tooling & automation·
+              - listitem [ref=e221]: SaaS systems·
+              - listitem [ref=e222]: clean design·
+              - listitem [ref=e223]: entrepreneurship
+        - complementary [ref=e224]:
+          - generic [ref=e225]:
+            - img "Gabriël Awes Zoretić" [ref=e226]
+            - generic [ref=e228]: "SUBJECT: G. AWES ZORETIĆ"
+          - generic "Live system status" [ref=e229]:
+            - generic [ref=e230]:
+              - generic [ref=e231]: system_status.live
+              - generic [ref=e232]: ONLINE
+            - generic [ref=e234]:
+              - generic [ref=e235]:
+                - generic [ref=e236]: STATUS
+                - generic [ref=e237]: employed + enrolled
+              - generic [ref=e238]:
+                - generic [ref=e239]: EMPLOYED
+                - generic [ref=e240]: H2B IT Solutions (operations)
+              - generic [ref=e241]:
+                - generic [ref=e242]: ENROLLED
+                - generic [ref=e243]: Cyber Security & Cloud at HU (duaal '26→'30)
+              - generic [ref=e244]:
+                - generic [ref=e245]: STACK
+                - generic [ref=e246]: Next.js · TypeScript · Node · clean design
+              - generic [ref=e247]:
+                - generic [ref=e248]: FOCUS
+                - generic [ref=e249]: cybersecurity · cloud · Linux · DevSecOps · GRC
+              - generic [ref=e250]:
+                - generic [ref=e251]: OPEN_TO
+                - generic [ref=e252]: freelance front-end · collabs · good convos
+              - generic [ref=e253]:
+                - generic [ref=e254]: LOCAL_TIME
+                - generic [ref=e255]: 15:27:36
+              - generic [ref=e256]:
+                - generic [ref=e257]: CODING_SINCE
+                - generic [ref=e258]: "2022"
+    - generic [ref=e260]:
+      - generic [ref=e261]:
+        - generic [ref=e262]: "02."
+        - heading "Case files" [level=2] [ref=e263]
+      - generic [ref=e265]:
+        - article [ref=e266]:
+          - generic [ref=e267]: CLASSIFIED
+          - generic [ref=e268]:
+            - generic [ref=e269]:
+              - img [ref=e271]
+              - link "GitHub repo" [ref=e274]:
+                - /url: https://github.com/Awes2000/MuseumBO2
+                - img [ref=e275]
+            - generic [ref=e277]:
+              - generic [ref=e278]: CF-00 // PRIORITY
+              - heading "Amsterdam Museum exhibit" [level=3] [ref=e279]
+              - paragraph [ref=e280]: "Client work for a museum: an Arduino ultrasonic sensor drives a real-time canvas solar system that zooms as visitors step closer, over a Dockerized PHP/MariaDB backend."
+              - list [ref=e281]:
+                - listitem [ref=e282]: JavaScript
+                - listitem [ref=e283]: Canvas
+                - listitem [ref=e284]: Web Serial API
+                - listitem [ref=e285]: Arduino / C++
+                - listitem [ref=e286]: Docker
+                - listitem [ref=e287]: PHP / MariaDB
+              - 'link "Open full case file: Amsterdam Museum exhibit" [ref=e288]':
+                - /url: /work/amsterdam-museum
+                - generic [ref=e289]: ▸ open case file
+          - generic [ref=e291]:
+            - generic [ref=e297]: arduino · web serial · canvas
+            - generic [ref=e298]:
+              - list [ref=e299]:
+                - listitem [ref=e300]:
+                  - generic [ref=e301]: ›
+                  - text: HC-SR04 ultrasonic sensor
+                - listitem [ref=e302]:
+                  - generic [ref=e303]: ›
+                  - text: USB serial · 115200 baud
+                - listitem [ref=e304]:
+                  - generic [ref=e305]: ›
+                  - text: canvas solar system · lerp zoom
+                - listitem [ref=e306]:
+                  - generic [ref=e307]: ›
+                  - text: Docker · PHP · MariaDB
+              - generic [ref=e309]: SIGNAL PATH · hardware to canvas
+        - article [ref=e310]:
+          - generic [ref=e311]: CLASSIFIED
+          - generic [ref=e312]:
+            - generic [ref=e313]:
+              - img [ref=e315]
+              - link "Live demo" [ref=e318]:
+                - /url: https://app.aixwings.nl/
+                - img [ref=e319]
+            - generic [ref=e321]:
+              - generic [ref=e322]: CF-01
+              - heading "Flurter" [level=3] [ref=e323]
+              - paragraph [ref=e324]: "AIxWings team graduation project: an AI-powered study app for students, shipped as an installable PWA. I owned the app architecture, theming and design system, and shipped 5 screens."
+              - list [ref=e325]:
+                - listitem [ref=e326]: Flutter
+                - listitem [ref=e327]: Dart
+                - listitem [ref=e328]: Riverpod
+                - listitem [ref=e329]: go_router
+                - listitem [ref=e330]: ML Kit OCR
+              - 'link "Open full case file: Flurter" [ref=e331]':
+                - /url: /work/flurter
+                - generic [ref=e332]: ▸ open case file
+          - generic [ref=e334]:
+            - generic [ref=e340]: app.aixwings.nl · graduation project
+            - generic [ref=e341]:
+              - generic [ref=e342]:
+                - img "Focus timer screen with pomodoro sessions" [ref=e343]
+                - img "Home screen with week planner and study plan" [ref=e344]
+                - img "Tasks screen with AI quiz generation" [ref=e345]
+              - generic [ref=e347]: FIELD MEDIA · live capture
+        - article [ref=e348]:
+          - generic [ref=e349]: CLASSIFIED
+          - generic [ref=e350]:
+            - generic [ref=e351]:
+              - img [ref=e353]
+              - generic [ref=e355]:
+                - link "GitHub repo" [ref=e356]:
+                  - /url: https://github.com/Awes2000/property-pulse-nextjs
+                  - img [ref=e357]
+                - link "Live demo" [ref=e359]:
+                  - /url: https://property-pulse-nextjs-phi.vercel.app/
+                  - img [ref=e360]
+            - generic [ref=e362]:
+              - generic [ref=e363]: CF-02
+              - heading "Property Pulse" [level=3] [ref=e364]
+              - generic [ref=e365]: Traineeship build · mentored
+              - paragraph [ref=e366]: "A property rental listing platform: image uploads, interactive maps and Google sign-in. A guided build from my CTO-mentored traineeship at Brigit."
+              - list [ref=e367]:
+                - listitem [ref=e368]: Next.js 16
+                - listitem [ref=e369]: MongoDB
+                - listitem [ref=e370]: Mapbox
+                - listitem [ref=e371]: Cloudinary
+                - listitem [ref=e372]: OAuth
+              - 'link "Open full case file: Property Pulse" [ref=e373]':
+                - /url: /work/property-pulse
+                - generic [ref=e374]: ▸ open case file
+        - article [ref=e375]:
+          - generic [ref=e376]: CLASSIFIED
+          - generic [ref=e377]:
+            - generic [ref=e378]:
+              - img [ref=e380]
+              - generic [ref=e382]:
+                - link "GitHub repo" [ref=e383]:
+                  - /url: https://github.com/Awes2000/prostore
+                  - img [ref=e384]
+                - link "Live demo" [ref=e386]:
+                  - /url: https://prostore-tau-eight.vercel.app/
+                  - img [ref=e387]
+            - generic [ref=e389]:
+              - generic [ref=e390]: CF-03
+              - heading "ProStore" [level=3] [ref=e391]
+              - generic [ref=e392]: Traineeship build · mentored
+              - paragraph [ref=e393]: A full-stack e-commerce store with a typed data layer, auth and an admin dashboard. A guided build from my CTO-mentored traineeship at Brigit.
+              - list [ref=e394]:
+                - listitem [ref=e395]: Next.js 16
+                - listitem [ref=e396]: TypeScript
+                - listitem [ref=e397]: Prisma
+                - listitem [ref=e398]: PostgreSQL
+                - listitem [ref=e399]: NextAuth
+              - 'link "Open full case file: ProStore" [ref=e400]':
+                - /url: /work/prostore
+                - generic [ref=e401]: ▸ open case file
+        - article [ref=e402]:
+          - generic [ref=e403]: CLASSIFIED
+          - generic [ref=e404]:
+            - generic [ref=e405]:
+              - img [ref=e407]
+              - link "GitHub repo" [ref=e410]:
+                - /url: https://github.com/Awes2000/colorpicker
+                - img [ref=e411]
+            - generic [ref=e413]:
+              - generic [ref=e414]: CF-04
+              - heading "Colorpicker" [level=3] [ref=e415]
+              - paragraph [ref=e416]: "A browser-based HSL palette generator: 99 random swatches, click any one to copy its value."
+              - list [ref=e417]:
+                - listitem [ref=e418]: JavaScript
+                - listitem [ref=e419]: OOP
+                - listitem [ref=e420]: SCSS
+              - 'link "Open full case file: Colorpicker" [ref=e421]':
+                - /url: /work/colorpicker
+                - generic [ref=e422]: ▸ open case file
+    - generic [ref=e424]:
+      - generic [ref=e425]:
+        - generic [ref=e426]: "03."
+        - heading "What's next?" [level=2] [ref=e427]
+      - generic [ref=e428]: guest@gabriel-os:~$ ./open-to-work
+      - heading "Let's build something." [level=2] [ref=e429]:
+        - generic [ref=e430]:
+          - text: Let's build
+          - text: something.
+      - paragraph [ref=e431]: Open to freelance front-end, collaborations, and good conversations. Always up for talking shop about Next.js, security or cloud. If that's a fit, say hello.
+      - link "> establish_connection █" [ref=e432]:
+        - /url: mailto:aweszoretic@hotmail.nl
+        - generic [ref=e433]:
+          - text: "> establish_connection"
+          - generic [ref=e434]: █
+      - button "copy aweszoretic@hotmail.nl" [ref=e435]
+    - generic [ref=e436]:
+      - generic [ref=e437]:
+        - generic [ref=e438]: © 2026 Gabriël Awes Zoretić · built and secured in Amsterdam
+        - button "psst, type help in the terminal gate ↻" [ref=e439]:
+          - generic [ref=e440]: psst, type help in the terminal gate ↻
+      - generic [ref=e441]:
+        - generic [ref=e442]:
+          - text: "> session active > connection secure"
+          - generic [ref=e443]: █
+        - link "↻ replay intro" [ref=e444]:
+          - /url: "?"
+  - status "System status bar" [ref=e12]:
+    - generic [ref=e13]:
+      - generic "Connection signal" [ref=e14]
+      - generic [ref=e19]: SECURE
+      - generic [ref=e20]: "::"
+      - generic [ref=e21]:
+        - text: "guest@gabriel-os:"
+        - text: ~█
+    - generic [ref=e22]:
+      - button "Keyboard shortcuts" [ref=e23]: "[?]"
+      - button "◇ snd" [ref=e24]
+      - button "Open command terminal (⌘K)" [ref=e25]: ">_"
+      - generic [ref=e26]: "::"
+      - generic [ref=e27]: 15:27:36
+  - button "Open Next.js Dev Tools" [ref=e33] [cursor=pointer]:
+    - img [ref=e34]
+  - alert [ref=e53]
