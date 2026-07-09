@@ -4,7 +4,6 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { useLang } from "@/components/LangProvider";
-import { ProofStrip } from "@/components/ProofStrip";
 import { T } from "@/components/T";
 import { ACCESS_EVENT, ripple } from "@/lib/bus";
 import { useAmsterdamClock } from "@/lib/hooks/useAmsterdamClock";
@@ -170,9 +169,6 @@ export function Hero() {
               <T k="hero.viewgh" />
               <span aria-hidden="true">↗</span>
             </a>
-          </div>
-          <div className={riseClass("")} style={riseDelay(2)}>
-            <ProofStrip />
           </div>
         </div>
 
