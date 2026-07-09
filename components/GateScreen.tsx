@@ -17,6 +17,8 @@ interface GateScreenProps {
   bar: string | null;
   typed: string;
   promptVisible: boolean;
+  greeting: string;
+  fortune: string;
   crtRef: RefObject<HTMLDivElement | null>;
   logRef: RefObject<HTMLDivElement | null>;
   inputRef: RefObject<HTMLInputElement | null>;
@@ -30,7 +32,7 @@ interface GateScreenProps {
 /* CRT terminal markup, 1:1 with Portfolio.html. All log strings are
    our own authored HTML; user-typed input is <>-stripped before echo. */
 export function GateScreen(props: GateScreenProps) {
-  const { powering, gone, lines, bar, typed, promptVisible, crtRef, logRef, inputRef } = props;
+  const { powering, gone, lines, bar, typed, promptVisible, greeting, fortune, crtRef, logRef, inputRef } = props;
   const sndOn = useSfxEnabled();
 
   return (
@@ -59,6 +61,7 @@ export function GateScreen(props: GateScreenProps) {
             ))}
             {bar !== null && <div className="ln" dangerouslySetInnerHTML={{ __html: bar }} />}
           </div>
+          {promptVisible && greeting && <div className="gate-greeting">{greeting}</div>}
           <div className="gate-prompt" id="gate-prompt" hidden={!promptVisible} onClick={props.onPromptClick}>
             <span className="ps1">guest@gabriel-os:~$</span>
             <span className="gate-input-wrap">
@@ -82,6 +85,7 @@ export function GateScreen(props: GateScreenProps) {
               }}
             />
           </div>
+          {promptVisible && fortune && <div className="gate-fortune">{"// " + fortune}</div>}
           <T as="p" className="gate-hint" k="gate.hint" hidden={!promptVisible} />
           <button className="gate-unlock" id="gate-unlock" hidden={!promptVisible} onClick={props.onUnlock}>
             <T k="gate.unlock" />

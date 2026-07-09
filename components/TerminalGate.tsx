@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { GateOverlays, makeRBars, type RBar } from "@/components/GateOverlays";
 import { GateScreen, type LogLine } from "@/components/GateScreen";
 import { dispatchAccess, ripple } from "@/lib/bus";
-import { buildPost, GATE_COMMANDS, lsProjects, RESUME_PATH, UNLOCK_KEY } from "@/lib/gate";
+import { buildPost, GATE_COMMANDS, greeting, lsProjects, pickFortune, RESUME_PATH, UNLOCK_KEY } from "@/lib/gate";
 import { readSessionValue, writeSessionValue } from "@/lib/hooks/useSessionFlag";
 import { SESSION_LANG_KEY } from "@/lib/i18n";
 import { sfx } from "@/lib/sfx";
@@ -29,6 +29,9 @@ export function TerminalGate() {
   const [gone, setGone] = useState(false);
   const [bars, setBars] = useState<RBar[]>([]);
   const [powering, setPowering] = useState(true);
+  /* greeting sits by the prompt, fortune below it — set once boot begins */
+  const [greetingText, setGreetingText] = useState("");
+  const [fortuneText, setFortuneText] = useState("");
 
   const logRef = useRef<HTMLDivElement>(null);
   const crtRef = useRef<HTMLDivElement>(null);
@@ -230,13 +233,15 @@ export function TerminalGate() {
     }
 
     setBars(makeRBars()); // redaction bars (staggered L→R wipe)
+    setGreetingText(greeting(nl.current));
+    setFortuneText(pickFortune(nl.current));
     later(() => setPowering(false), 560);
     buildPost(nl.current).forEach(([content, cls, delay]) => later(() => line(content, cls), 420 + delay));
     later(() => {
       zap(false);
       setPromptVisible(true);
       if (!coarse.current) setTimeout(() => inputRef.current?.focus(), 60); // never force the mobile keyboard
-    }, 2050);
+    }, 1720);
 
     /* always skippable via Esc + focus-trapped while open (aria-modal) */
     const onEsc = (e: KeyboardEvent) => {
@@ -306,6 +311,8 @@ export function TerminalGate() {
         bar={bar}
         typed={typed}
         promptVisible={promptVisible}
+        greeting={greetingText}
+        fortune={fortuneText}
         crtRef={crtRef}
         logRef={logRef}
         inputRef={inputRef}

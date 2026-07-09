@@ -93,8 +93,8 @@ export const DICT = {
 
   /* gate (static UI) */
   "gate.skip": { en: "skip intro →", nl: "intro overslaan →" },
-  "gate.hint": { en: "type <b>sudo access-portfolio</b> and press ENTER&nbsp; ·&nbsp; or just press ENTER&nbsp; ·&nbsp; (esc to skip)",
-    nl: "typ <b>sudo access-portfolio</b> en druk op ENTER&nbsp; ·&nbsp; of druk gewoon op ENTER&nbsp; ·&nbsp; (esc om over te slaan)" },
+  "gate.hint": { en: "press <b>ENTER</b> to unlock&nbsp; ·&nbsp; type <b>help</b>&nbsp; ·&nbsp; esc to skip",
+    nl: "druk op <b>ENTER</b> om te ontgrendelen&nbsp; ·&nbsp; typ <b>help</b>&nbsp; ·&nbsp; esc om over te slaan" },
   "gate.unlock": { en: "▶ UNLOCK", nl: "▶ ONTGRENDEL" },
 } as const satisfies Record<string, { en: string; nl: string }>;
 

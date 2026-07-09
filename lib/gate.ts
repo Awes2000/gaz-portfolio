@@ -42,28 +42,27 @@ export function pickFortune(nl: boolean): string {
 
 export type PostLine = [html: string, cls: string, delay: number];
 
+/* The greeting and fortune are intentionally NOT in the boot log:
+   the greeting lands next to the prompt once boot completes, and the
+   fortune sits below the prompt (see TerminalGate / GateScreen), so
+   the POST reads as a clean tension build to AUTH REQUIRED. */
 export function buildPost(nl: boolean): PostLine[] {
-  const fortune = pickFortune(nl);
   return nl
     ? [
         ["> gabriel-os v4.0 opstarten...", "dim", 120],
-        ["> " + greeting(true), "dim", 280],
-        ['> mounten: full-stack <span class="ok">[ok]</span>', "", 460],
-        ['> mounten: front-end + design <span class="ok">[ok]</span>', "", 640],
-        ['> module: cybersecurity_cloud <span class="warn">[laden...]</span>', "", 840],
-        ['> <span class="warn">WAARSCHUWING:</span> portfolio is <span class="crit">GEHEIM</span>', "", 1060],
-        ['> <span class="dim">// ' + fortune + "</span>", "dim", 1240],
-        ['> <span class="grant">AUTHENTICATIE VEREIST</span>', "", 1420],
+        ['> mounten: full-stack <span class="ok">[ok]</span>', "", 360],
+        ['> mounten: front-end + design <span class="ok">[ok]</span>', "", 540],
+        ['> module: cybersecurity_cloud <span class="warn">[laden...]</span>', "", 740],
+        ['> <span class="warn">WAARSCHUWING:</span> portfolio is <span class="crit">GEHEIM</span>', "", 960],
+        ['> <span class="grant">AUTHENTICATIE VEREIST</span>', "", 1160],
       ]
     : [
         ["> gabriel-os v4.0 booting...", "dim", 120],
-        ["> " + greeting(false), "dim", 280],
-        ['> mounting: full-stack <span class="ok">[ok]</span>', "", 460],
-        ['> mounting: front-end + design <span class="ok">[ok]</span>', "", 640],
-        ['> module: cybersecurity_cloud <span class="warn">[loading...]</span>', "", 840],
-        ['> <span class="warn">WARNING:</span> portfolio is <span class="crit">CLASSIFIED</span>', "", 1060],
-        ['> <span class="dim">// ' + fortune + "</span>", "dim", 1240],
-        ['> <span class="grant">AUTH REQUIRED</span>', "", 1420],
+        ['> mounting: full-stack <span class="ok">[ok]</span>', "", 360],
+        ['> mounting: front-end + design <span class="ok">[ok]</span>', "", 540],
+        ['> module: cybersecurity_cloud <span class="warn">[loading...]</span>', "", 740],
+        ['> <span class="warn">WARNING:</span> portfolio is <span class="crit">CLASSIFIED</span>', "", 960],
+        ['> <span class="grant">AUTH REQUIRED</span>', "", 1160],
       ];
 }
 

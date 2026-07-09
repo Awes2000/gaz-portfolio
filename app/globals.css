@@ -159,7 +159,10 @@ img{display:block;max-width:100%}
 :root{
   --crt-bg:#060A12;
   --phosphor:#8FA6C8;
-  --phosphor-dim:#3E5170;
+  /* dim tone for gate text. Raised from #3E5170 (~2:1, failed AA on
+     near-black) to ~5.5:1 so boot lines, hint, skip and sound pass AA. */
+  --phosphor-dim:#7688A8;
+  --phosphor-edge:#3E5170; /* the old dim, kept for borders/rules only */
   --phosphor-bright:#CBD8EC;
   --static-op:0.07;
 }
@@ -209,18 +212,25 @@ html.unlocked .stamp{opacity:0;transform:scale(1.15) rotate(0)}
 #gate.gone{opacity:0;visibility:hidden;pointer-events:none}
 
 .crt-screen{
-  position:relative;width:min(680px,92vw);min-height:380px;
-  padding:30px 34px 26px;border-radius:22px/30px;overflow:hidden;
-  background:rgba(6,10,18,.80);
-  backdrop-filter:blur(7px) saturate(120%);-webkit-backdrop-filter:blur(7px) saturate(120%);
-  box-shadow:0 0 0 1px rgba(63,81,112,.4),0 0 60px rgba(8,16,30,.9),
-    inset 0 0 90px rgba(0,0,0,.85),inset 0 0 0 2px rgba(10,16,28,.6);
+  position:relative;width:min(640px,92vw);
+  padding:26px 34px 22px;border-radius:28px/40px;overflow:hidden;
+  /* glass: lower opacity + a stronger backdrop blur so the blurred,
+     redacted site behind refracts through the panel */
+  background:rgba(6,10,18,.70);
+  backdrop-filter:blur(11px) saturate(135%) contrast(104%);
+  -webkit-backdrop-filter:blur(11px) saturate(135%) contrast(104%);
+  /* the heavy inset darkening reads as screen curvature (edges recede);
+     the 1px top highlight is the glass catching light */
+  box-shadow:0 0 0 1px rgba(63,81,112,.45),0 0 60px rgba(8,16,30,.9),
+    inset 0 0 130px rgba(0,0,0,.92),inset 0 1px 0 rgba(203,216,236,.12),
+    inset 0 0 0 2px rgba(10,16,28,.6);
   transition:transform 1s var(--ease),opacity .8s var(--ease),filter .8s;
 }
-/* faint curvature + glass refraction edge (chromatic whisper) */
-.crt-screen::before{content:"";position:absolute;inset:0;border-radius:inherit;
-  pointer-events:none;box-shadow:inset 2px 0 0 rgba(120,160,255,.10),
-    inset -2px 0 0 rgba(255,120,140,.10);mix-blend-mode:screen}
+/* chromatic aberration: red/cyan fringing at the panel edges */
+.crt-screen::before{content:"";position:absolute;inset:0;border-radius:inherit;z-index:6;
+  pointer-events:none;mix-blend-mode:screen;
+  box-shadow:inset 3px 0 6px rgba(80,150,255,.16),inset -3px 0 6px rgba(255,100,140,.16),
+    inset 0 3px 6px rgba(80,150,255,.09),inset 0 -3px 6px rgba(255,100,140,.09)}
 html.unlocked .crt-screen{transform:scale(1.08);opacity:0;filter:blur(3px)}
 
 .crt-content{position:relative;z-index:2}
@@ -234,7 +244,7 @@ html.unlocked .crt-screen{transform:scale(1.08);opacity:0;filter:blur(3px)}
   font-size:11px;letter-spacing:.14em;text-transform:uppercase;text-decoration:none}
 .gate-skip:hover,.gate-skip:focus-visible{color:var(--phosphor-bright)}
 
-.gate-log{font-size:14px;line-height:1.95;color:var(--phosphor);min-height:170px}
+.gate-log{font-size:14px;line-height:1.9;color:var(--phosphor);min-height:150px}
 .gate-log .ln{white-space:pre-wrap}
 .gate-log .ok{color:var(--phosphor-bright)}
 .gate-log .dim{color:var(--phosphor-dim)}
@@ -244,7 +254,13 @@ html.unlocked .crt-screen{transform:scale(1.08);opacity:0;filter:blur(3px)}
 .gate-log .grant{color:var(--phosphor-bright);font-weight:700;letter-spacing:.18em}
 .gate-bar-progress{display:inline-block;color:var(--phosphor-bright);letter-spacing:1px}
 
-.gate-prompt{display:flex;align-items:center;gap:9px;margin-top:10px;font-size:14px;
+/* greeting lands just above the prompt once boot completes */
+.gate-greeting{color:var(--phosphor);font-size:13px;letter-spacing:.02em;margin:10px 0 8px}
+.gate-greeting::before{content:"> ";color:var(--phosphor-dim)}
+/* fortune sits quietly below the prompt, no longer breaking the boot */
+.gate-fortune{margin-top:12px;color:var(--phosphor-dim);font-size:12px;font-style:italic;
+  letter-spacing:.03em}
+.gate-prompt{display:flex;align-items:center;gap:9px;margin-top:2px;font-size:14px;
   flex-wrap:wrap;position:relative}
 .gate-prompt .ps1{color:var(--phosphor-bright)}
 .gate-input-wrap{position:relative;color:var(--phosphor-bright);white-space:pre}
@@ -252,15 +268,21 @@ html.unlocked .crt-screen{transform:scale(1.08);opacity:0;filter:blur(3px)}
 #gate-cmd{position:absolute;inset:0;opacity:0;width:100%;height:100%;
   background:transparent;border:none;outline:none;font:inherit;
   color:transparent;caret-color:transparent;cursor:text}
-.gate-hint{margin-top:16px;color:var(--phosphor-dim);font-size:12px;line-height:1.7;
-  letter-spacing:.04em}
-.gate-hint b{color:var(--phosphor);font-weight:700}
+.gate-hint{margin-top:14px;color:var(--phosphor-dim);font-size:12px;line-height:1.7;
+  letter-spacing:.04em;max-width:44ch}
+.gate-hint b{color:var(--phosphor-bright);font-weight:700}
 
-.gate-unlock{margin-top:18px;display:inline-flex;align-items:center;gap:8px;
-  font-family:var(--font-mono);font-size:15px;letter-spacing:.1em;color:var(--crt-bg);
-  background:var(--phosphor);border:none;border-radius:6px;padding:13px 26px;
-  cursor:pointer;font-weight:700;box-shadow:0 0 18px rgba(143,166,200,.4)}
-.gate-unlock:hover{background:var(--phosphor-bright)}
+/* unlock button: transparent steel outline, mono caps, glow on
+   hover/focus. No glossy fill (it broke the CRT illusion). */
+.gate-unlock{margin-top:16px;display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--font-mono);font-size:13px;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--phosphor-bright);background:transparent;
+  border:1px solid rgba(143,166,200,.5);border-radius:5px;padding:11px 24px;
+  cursor:pointer;font-weight:500;
+  transition:color .2s var(--ease),border-color .2s var(--ease),background .2s var(--ease),box-shadow .2s var(--ease)}
+.gate-unlock:hover,.gate-unlock:focus-visible{color:#eaf1fb;border-color:var(--phosphor-bright);
+  background:rgba(143,166,200,.08);
+  box-shadow:0 0 22px rgba(143,166,200,.30),inset 0 0 14px rgba(143,166,200,.12);outline:none}
 
 .gate-sound{position:absolute;bottom:18px;right:20px;z-index:5;
   background:transparent;border:1px solid rgba(63,81,112,.5);border-radius:5px;
@@ -271,12 +293,18 @@ html.unlocked .crt-screen{transform:scale(1.08);opacity:0;filter:blur(3px)}
 
 /* scanlines + vignette + flicker overlays */
 .crt-scanlines{position:absolute;inset:0;z-index:3;pointer-events:none;border-radius:inherit;
-  background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0 2px,rgba(0,0,0,.22) 2px 3px);
-  background-size:100% 3px;animation:scandrift 8s linear infinite}
-@keyframes scandrift{to{background-position:0 3px}}
+  background:repeating-linear-gradient(0deg,transparent 0 1px,rgba(0,0,0,.36) 1px 2.5px);
+  background-size:100% 2.5px;animation:scandrift 8s linear infinite}
+@keyframes scandrift{to{background-position:0 2px}}
+/* one brighter scan bar sweeping down the tube */
+.crt-scanlines::after{content:"";position:absolute;left:0;right:0;top:-15%;height:14%;
+  background:linear-gradient(180deg,transparent,rgba(143,166,200,.07),transparent);
+  animation:scansweep 6.5s linear infinite}
+@keyframes scansweep{0%{top:-15%}100%{top:100%}}
+/* vignette + curvature: the edges fall away like a bulged tube */
 .crt-vignette{position:absolute;inset:0;z-index:4;pointer-events:none;border-radius:inherit;
-  background:radial-gradient(120% 130% at 50% 50%,transparent 55%,rgba(0,0,0,.55) 100%);
-  box-shadow:inset 0 0 60px rgba(0,0,0,.7)}
+  background:radial-gradient(115% 125% at 50% 48%,transparent 46%,rgba(0,0,0,.64) 100%);
+  box-shadow:inset 0 0 72px rgba(0,0,0,.78)}
 .crt-flicker{position:absolute;inset:0;z-index:5;pointer-events:none;border-radius:inherit;
   background:rgba(143,166,200,.03);animation:crtflicker 5.5s steps(1) infinite;opacity:0}
 @keyframes crtflicker{0%,97%,100%{opacity:0}98%{opacity:.5}99%{opacity:.15}}
