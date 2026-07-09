@@ -23,7 +23,10 @@ export function SonarCanvas() {
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (reduce || !canvas) {
+    /* degrade to a still background on touch/mobile: the sweep is
+       near-invisible anyway and a canvas RAF is not worth the battery */
+    const coarse = matchMedia("(hover: none), (pointer: coarse)").matches;
+    if (reduce || coarse || !canvas) {
       document.documentElement.classList.add("rm-static");
       return;
     }
