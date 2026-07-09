@@ -8,3 +8,8 @@ next-env.d.ts
 .env.check
 
 # .env.production is committed on purpose (public canonical URL, no secrets)
+
+# Playwright MCP scratch + local screenshots
+.playwright-mcp/
+/*.png
+/*.jpeg
