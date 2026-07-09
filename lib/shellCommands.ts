@@ -47,7 +47,7 @@ export const OUT: Record<string, () => string[]> = {
     "OS        gabriel-os v4.0 (navy/steel)",
     "Host      Amsterdam, NL",
     "Shell     /bin/sh · ⌘K",
-    "Uptime    coding since 2021",
+    "Uptime    coding since 2022",
     "Stack     Next.js · TypeScript · Node",
     "Focus     cybersecurity · cloud · Linux",
   ],
