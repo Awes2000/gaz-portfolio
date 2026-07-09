@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { RippleCanvas } from "@/components/RippleCanvas";
+import { SonarCanvas } from "@/components/SonarCanvas";
 import { ScannerCursor } from "@/components/ScannerCursor";
 import { CASES } from "@/lib/cases";
 import { SITE_URL } from "@/lib/siteUrl";
@@ -65,7 +65,7 @@ export default async function WorkPage({ params }: { params: Promise<WorkParams>
     <>
       <script dangerouslySetInnerHTML={{ __html: UNLOCK_SCRIPT }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <RippleCanvas />
+      <SonarCanvas />
       <ScannerCursor />
       <main id="app" className="work-page">
         <div className="wrap work-wrap">

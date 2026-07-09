@@ -6,7 +6,7 @@ import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
 import { Hero } from "@/components/Hero";
 import { Hud } from "@/components/Hud";
-import { RippleCanvas } from "@/components/RippleCanvas";
+import { SonarCanvas } from "@/components/SonarCanvas";
 import { ScannerCursor } from "@/components/ScannerCursor";
 import { Shell } from "@/components/Shell";
 import { TerminalGate } from "@/components/TerminalGate";
@@ -22,7 +22,7 @@ import { TerminalGate } from "@/components/TerminalGate";
 export function Portfolio() {
   return (
     <>
-      <RippleCanvas />
+      <SonarCanvas />
       <ScannerCursor />
       <TerminalGate />
       <Hud />

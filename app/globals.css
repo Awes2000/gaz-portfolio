@@ -23,8 +23,14 @@
   --mint-6:rgba(100,255,218,.6);
   --slate-head:#CCD6F6;
   --slate-body:#A8B2D1;
-  --peri:#97AFFE;
+  /* Palette discipline: navy base + ONE accent (mint) + navy-family
+     text tints. --peri used to be a saturated periwinkle (a second
+     hue); it is now a neutral cool near-white, so hierarchy comes
+     from weight, scale and opacity, never from a second colour. */
+  --peri:#CBD7F0;
   --peri-light:#DEE6FD;
+  /* neutralised alert tint: replaces the old red/amber warn colours */
+  --steel:#8FA6C8;
 
   --font-display:'Roboto Slab',serif;
   --font-sans:'Inter',-apple-system,system-ui,sans-serif;
@@ -60,32 +66,32 @@ a{color:var(--mint);text-decoration:none}
 img{display:block;max-width:100%}
 
 /* ============================================================
-   RIPPLE BACKGROUND CANVAS
+   SONAR SWEEP BACKGROUND CANVAS
    ============================================================ */
-#ripple{
+#sonar{
   position:fixed;inset:0;z-index:0;
   display:block;width:100%;height:100%;
   background:
-    radial-gradient(1100px 720px at 76% -8%, #10304a 0%, transparent 62%),
-    radial-gradient(1000px 740px at -8% 108%, #142a46 0%, transparent 58%),
-    radial-gradient(1500px 980px at 50% 48%, #0c2038 0%, var(--navy) 80%),
+    radial-gradient(1500px 980px at 50% 46%, #0c2038 0%, var(--navy) 80%),
     var(--navy);
 }
-/* reduced-motion / no-WebGL fallback: a textured still of the same
-   water — layered navy/steel washes only, no dots, no motion */
-.rm-static #ripple::after{
+/* reduced-motion / no-canvas fallback: a still sonar at rest, one
+   faint radial glow at the sweep origin. No sweep, no rings, no dots. */
+.rm-static #sonar::after{
   content:"";position:absolute;inset:0;
   background:
-    radial-gradient(58% 42% at 30% 32%, rgba(143,166,200,.045) 0%, transparent 70%),
-    radial-gradient(50% 38% at 74% 70%, rgba(143,166,200,.03) 0%, transparent 72%),
-    linear-gradient(205deg, transparent 34%, rgba(3,8,16,.4) 100%);
+    radial-gradient(40% 34% at 50% 46%, rgba(100,255,218,.04) 0%, transparent 70%),
+    radial-gradient(60% 44% at 50% 46%, rgba(143,166,200,.03) 0%, transparent 72%);
 }
 
-/* ---- depth stack above the water ---- */
+/* ---- depth stack above the sweep ---- */
 /* vertical luminance scrim: grounds the HUD at the top, settles the
    footer at the bottom, leaves the middle clear for content */
 .bg-scrim{position:fixed;inset:0;z-index:1;pointer-events:none;
   background:linear-gradient(180deg,rgba(3,8,17,.5) 0%,transparent 20%,transparent 72%,rgba(2,7,15,.55) 100%)}
+/* vignette: darkens the corners so the sweep reads centre-weighted */
+.bg-vignette{position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(120% 120% at 50% 46%, transparent 52%, rgba(2,6,13,.66) 100%)}
 /* static monochrome grain: gives the surface tooth, kills banding.
    Deliberately static (no flicker) so reduced motion keeps it too. */
 .bg-grain{position:fixed;inset:-16px;z-index:1;pointer-events:none;opacity:.05;
@@ -187,8 +193,7 @@ html.unlocked .rbar{transform:scaleX(0);opacity:0}
   font-size:13px;transition:opacity .4s,transform .5s var(--ease)}
 .stamp.s1{top:24%;left:8%;transform:rotate(-9deg);font-size:22px}
 .stamp.s2{top:62%;right:10%;transform:rotate(7deg);font-size:18px}
-.stamp.s3{top:42%;left:38%;transform:rotate(-3deg);color:rgba(176,120,120,.5);
-  border-color:rgba(176,120,120,.32)}
+.stamp.s3{top:42%;left:38%;transform:rotate(-3deg)}
 html.unlocked .stamp{opacity:0;transform:scale(1.15) rotate(0)}
 
 /* ---- TV static (cheap SVG turbulence) ---- */
@@ -231,16 +236,17 @@ html.unlocked .crt-screen{transform:scale(1.08);opacity:0;filter:blur(3px)}
 
 .gate-log{font-size:14px;line-height:1.95;color:var(--phosphor);min-height:170px}
 .gate-log .ln{white-space:pre-wrap}
-.gate-log .ok{color:#7fe0b0}
+.gate-log .ok{color:var(--phosphor-bright)}
 .gate-log .dim{color:var(--phosphor-dim)}
-.gate-log .warn{color:#d8b070}
-.gate-log .crit{color:#d88a8a}
+/* boot-log emphasis via brightness, not hue (was amber / red) */
+.gate-log .warn{color:var(--phosphor);font-weight:500}
+.gate-log .crit{color:var(--phosphor-bright);font-weight:700}
 .gate-log .grant{color:var(--phosphor-bright);font-weight:700;letter-spacing:.18em}
 .gate-bar-progress{display:inline-block;color:var(--phosphor-bright);letter-spacing:1px}
 
 .gate-prompt{display:flex;align-items:center;gap:9px;margin-top:10px;font-size:14px;
   flex-wrap:wrap;position:relative}
-.gate-prompt .ps1{color:#7fe0b0}
+.gate-prompt .ps1{color:var(--phosphor-bright)}
 .gate-input-wrap{position:relative;color:var(--phosphor-bright);white-space:pre}
 .caret{display:inline-block;color:var(--phosphor-bright);animation:blink 1.05s steps(1) infinite}
 #gate-cmd{position:absolute;inset:0;opacity:0;width:100%;height:100%;
@@ -727,8 +733,8 @@ section{position:relative}
 .case.feature{grid-column:1/-1;min-height:300px}
 .case-stamp{position:absolute;top:14px;right:14px;z-index:3;
   font-family:var(--font-mono);font-size:10.5px;letter-spacing:.2em;
-  color:#ff6b5e;border:1px solid rgba(255,107,94,.5);border-radius:4px;
-  padding:3px 8px;transform:rotate(6deg);transition:opacity .3s;opacity:.9}
+  color:var(--steel);border:1px solid rgba(143,166,200,.4);border-radius:4px;
+  padding:3px 8px;transform:rotate(6deg);transition:opacity .3s;opacity:.72}
 .case.unlocked .case-stamp{opacity:0}
 .case-redact{position:absolute;inset:0;z-index:2;pointer-events:none;
   background:
@@ -987,7 +993,7 @@ html.locked #shell-bar{transform:translateY(120%)}
   max-height:42vh;overflow:auto}
 .pal-log .ln{white-space:pre-wrap}
 .pal-log .ok{color:var(--mint)}.pal-log .dim{color:#7A8DB3}
-.pal-log .warn{color:var(--peri)}.pal-log .crit{color:#d88a8a}
+.pal-log .warn{color:var(--phosphor)}.pal-log .crit{color:var(--phosphor-bright);font-weight:700}
 .pal-log .ps1{color:var(--mint)}
 .pal-log .bar{color:var(--mint);letter-spacing:1px}
 .pal-prompt{display:flex;align-items:center;gap:9px;padding:10px 16px 14px;
