@@ -21,14 +21,12 @@ export const metadata: Metadata = {
 
 /* Dutch entry point: same server-rendered portfolio with NL as the
    route language, so crawlers index the Dutch copy at its own URL.
-   The tiny inline script stamps <html lang="nl"> before hydration. */
+   The (nl) root layout serves <html lang="nl"> directly, so no
+   client-side lang stamping is needed here. */
 export default function PageNl() {
   return (
-    <>
-      <script dangerouslySetInnerHTML={{ __html: "document.documentElement.lang='nl'" }} />
-      <LangProvider initial="nl">
-        <Portfolio />
-      </LangProvider>
-    </>
+    <LangProvider initial="nl">
+      <Portfolio />
+    </LangProvider>
   );
 }

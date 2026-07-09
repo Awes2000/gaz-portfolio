@@ -6,10 +6,11 @@ import { motion, useReducedMotion } from "motion/react";
 /* Remounts on every route change: a brief in-concept "decrypting
    next file" curtain, content settling blur→sharp. The very first
    load renders statically (zero LCP cost); reduced motion gets an
-   opacity-only fade. */
+   opacity-only fade. Shared by both language root layouts via their
+   template.tsx so the module-level flag is a single source of truth. */
 let hasNavigated = false;
 
-export default function Template({ children }: { children: React.ReactNode }) {
+export default function RouteTemplate({ children }: { children: React.ReactNode }) {
   const reduce = !!useReducedMotion();
   /* captured once at mount: false on the very first page load,
      true for every subsequent client navigation */
