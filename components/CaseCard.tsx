@@ -93,6 +93,7 @@ export function CaseCard({ c, onOpen }: CaseCardProps) {
         <div className="case-body">
           <span className="case-id">{c.id}</span>
           <h3 className="case-title">{c.title}</h3>
+          {c.tag && <span className="case-tag">{c.tag}</span>}
           <p className="case-desc">{c.desc}</p>
           <ul className="case-tech">
             {c.tech.map((t) => (
@@ -117,7 +118,7 @@ export function CaseCard({ c, onOpen }: CaseCardProps) {
               </span>
               <span className="url">{c.mediaUrl || c.media || "preview"}</span>
             </div>
-            <div className={`cm-stage${c.shots || c.video ? " has-shots" : ""}`}>
+            <div className={`cm-stage${c.shots || c.video ? " has-shots" : ""}${c.mediaSpec ? " has-spec" : ""}`}>
               {c.video ? (
                 <>
                   <HoverVideo video={c.video} className="cm-video" />
@@ -144,6 +145,21 @@ export function CaseCard({ c, onOpen }: CaseCardProps) {
                   <span className="cm-scan" />
                   <span className="cm-cap">
                     FIELD MEDIA <b>· live capture</b>
+                  </span>
+                </>
+              ) : c.mediaSpec ? (
+                <>
+                  <ul className="cm-spec">
+                    {c.mediaSpec.map((line) => (
+                      <li key={line}>
+                        <span className="cm-spec-mark">›</span>
+                        {line}
+                      </li>
+                    ))}
+                  </ul>
+                  <span className="cm-scan" />
+                  <span className="cm-cap">
+                    SIGNAL PATH <b>· hardware to canvas</b>
                   </span>
                 </>
               ) : (

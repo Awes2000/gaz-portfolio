@@ -144,11 +144,16 @@ export function RippleCanvas() {
       });
     };
     window.addEventListener(ACCESS_EVENT, onAccess);
+    const root = document.documentElement;
     const onMove = (e: PointerEvent) => {
       if (e.pointerType && e.pointerType !== "mouse") return;
       tmx = e.clientX * SCALE;
       tmy = (innerHeight - e.clientY) * SCALE;
       str = Math.min(1, str + 0.12);
+      /* parallax: the grain drifts a few px against the pointer, one
+         plane deeper than the content (compositor-only transform) */
+      root.style.setProperty("--bg-gx", ((e.clientX / innerWidth - 0.5) * -12).toFixed(1) + "px");
+      root.style.setProperty("--bg-gy", ((e.clientY / innerHeight - 0.5) * -12).toFixed(1) + "px");
     };
     const onDown = () => {
       str = 1;

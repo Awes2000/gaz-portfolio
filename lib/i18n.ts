@@ -67,12 +67,9 @@ export const DICT = {
   "tele.v.open": { en: "freelance front-end · collabs · good convos", nl: "freelance front-end · samenwerkingen · goede gesprekken" },
   "tele.k.time": { en: "LOCAL_TIME", nl: "LOKALE_TIJD" },
   "tele.k.since": { en: "CODING_SINCE", nl: "CODEERT_SINDS" },
-  "tele.k.latency": { en: "LATENCY", nl: "LATENTIE" },
 
   /* projects */
   "projects.title": { en: "Case files", nl: "Dossiers" },
-  "projects.flag": { en: "<b>⚑ One thing missing:</b> the featured <b>Flutter App</b> card now has your real screenshots, but still no repo or store link. Send me the repo URL (or TestFlight/Play link) and the project's real name and I'll wire them in.",
-    nl: "<b>⚑ Eén ding mist nog:</b> de uitgelichte <b>Flutter App</b>-kaart heeft nu je echte screenshots, maar nog geen repo- of store-link. Stuur me de repo-URL (of TestFlight/Play-link) en de echte naam van het project, dan zet ik ze erin." },
   "case.cta": { en: "▸ open case file", nl: "▸ open dossier" },
 
   /* contact */
@@ -86,9 +83,9 @@ export const DICT = {
     nl: '<span class="cc-ps">&gt;</span> verbinding_maken<span class="cc-cursor">█</span>' },
   "contact.copybtn": { en: "copy aweszoretic@hotmail.nl", nl: "kopieer aweszoretic@hotmail.nl" },
 
-  /* footer */
-  "footer.copy": { en: '© <span id="year"></span> Gabriël Awes Zoretić · built and secured in Amsterdam',
-    nl: '© <span id="year"></span> Gabriël Awes Zoretić · gebouwd en beveiligd in Amsterdam' },
+  /* footer — the year is rendered by React (see Footer.tsx), so no
+     empty #year span to fill; this is just the tail line */
+  "footer.builtline": { en: "built and secured in Amsterdam", nl: "gebouwd en beveiligd in Amsterdam" },
   "footer.egg": { en: "psst, type <b>help</b> in the terminal gate ↻", nl: "psst, typ <b>help</b> in de terminal-gate ↻" },
   "footer.session": { en: '<span class="fs-ps">&gt;</span> session active &nbsp;<span class="fs-ps">&gt;</span> <span id="foot-session-txt">connection secure</span><span class="fs-cursor">█</span>',
     nl: '<span class="fs-ps">&gt;</span> sessie actief &nbsp;<span class="fs-ps">&gt;</span> <span id="foot-session-txt">verbinding beveiligd</span><span class="fs-cursor">█</span>' },

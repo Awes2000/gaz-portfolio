@@ -88,10 +88,13 @@ img{display:block;max-width:100%}
   background:linear-gradient(180deg,rgba(3,8,17,.5) 0%,transparent 20%,transparent 72%,rgba(2,7,15,.55) 100%)}
 /* static monochrome grain: gives the surface tooth, kills banding.
    Deliberately static (no flicker) so reduced motion keeps it too. */
-.bg-grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.05;
+.bg-grain{position:fixed;inset:-16px;z-index:1;pointer-events:none;opacity:.05;
   mix-blend-mode:overlay;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch' seed='7'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
-  background-size:180px 180px}
+  background-size:180px 180px;
+  transform:translate3d(var(--bg-gx,0),var(--bg-gy,0),0);
+  transition:transform .5s var(--ease)}
+@media (prefers-reduced-motion:reduce){.bg-grain{transform:none;transition:none}}
 
 #app{position:relative;z-index:2}
 
@@ -1215,3 +1218,82 @@ html.locked #shell-bar{transform:translateY(120%)}
 
 /* polish: tighter display tracking on the hero name at large sizes */
 .hero-name{letter-spacing:-.015em}
+
+/* ============================================================
+   VISUAL LAYER v2 — depth, glass, rhythm, motion.
+   Appended last so these refinements win over the ported base
+   where selectors overlap. One easing (--ease), one timing scale.
+   ============================================================ */
+:root{
+  --t-fast:.2s;
+  --t-mid:.42s;
+  --t-slow:.7s;
+  --section-y:clamp(84px,12vh,138px);
+  /* glass recipe: a bright top edge reads as light from above, over
+     a soft ambient drop shadow */
+  --edge-light:inset 0 1px 0 rgba(222,230,253,.16);
+  --panel-shadow:0 22px 50px -28px rgba(0,0,0,.7),0 6px 18px -14px rgba(0,0,0,.55);
+}
+/* wider side margins on large screens so content is anchored, not adrift */
+@media (min-width:1240px){:root{--pad:clamp(40px,5vw,56px)}}
+
+/* ---- vertical rhythm: one consistent scale across sections ---- */
+#about,#projects{padding:var(--section-y) 0}
+#contact{padding:calc(var(--section-y) * 1.12) 0 var(--section-y)}
+
+/* ---- glass panels floating above the moving water ---- */
+.telemetry,.cap,.portrait,.case{box-shadow:var(--edge-light),var(--panel-shadow)}
+/* real backdrop glass reserved for the large floating panels (perf) */
+.telemetry,.case{backdrop-filter:blur(13px) saturate(128%);-webkit-backdrop-filter:blur(13px) saturate(128%)}
+.telemetry{background:linear-gradient(168deg,rgba(19,37,66,.52),rgba(12,26,48,.44))}
+.cap{background:linear-gradient(168deg,rgba(19,37,66,.46),rgba(12,26,48,.34))}
+/* touch / coarse pointers: drop backdrop-filter and lean on opaque
+   fills so the animated background never has to composite through glass */
+@media (hover:none),(pointer:coarse){
+  .telemetry,.case{backdrop-filter:none;-webkit-backdrop-filter:none}
+  .telemetry,.cap,.case{background:linear-gradient(168deg,rgba(17,32,58,.93),rgba(11,22,42,.93))}
+}
+
+/* ---- card hover: lift, glow, and a slight tilt (motion-gated) ---- */
+.case-grid{perspective:1500px}
+.case{transition:transform var(--t-mid) var(--ease),box-shadow var(--t-mid) var(--ease),
+  border-color var(--t-mid) var(--ease);transform-origin:center bottom}
+@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){
+  .case:hover{
+    transform:translateY(-8px) rotateX(2.6deg) scale(1.006);
+    border-color:var(--mint-3);
+    box-shadow:var(--edge-light),0 0 0 1px rgba(100,255,218,.10),
+      0 34px 62px -30px rgba(0,0,0,.72),0 0 34px -6px rgba(100,255,218,.22);
+  }
+}
+@media (prefers-reduced-motion:reduce){.case:hover{transform:none;border-color:var(--mint-3);box-shadow:var(--edge-light),var(--panel-shadow)}}
+
+/* ---- links get a mono underline that draws in ---- */
+.link-mono{position:relative}
+.link-mono::after{content:"";position:absolute;left:0;bottom:-3px;height:1px;width:0;
+  background:linear-gradient(90deg,var(--mint),var(--mint-glow));transition:width var(--t-mid) var(--ease)}
+.link-mono:hover::after,.link-mono:focus-visible::after{width:100%}
+@media (prefers-reduced-motion:reduce){.link-mono::after{transition:none}}
+
+/* ---- honesty tag: quiet and contextual, never a badge of honour ---- */
+.case-tag{align-self:flex-start;display:inline-flex;align-items:center;gap:7px;
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;color:#8fa3c4;
+  border:1px solid rgba(151,175,254,.22);border-radius:999px;padding:3px 11px;
+  background:rgba(151,175,254,.05);white-space:nowrap}
+.case-tag::before{content:"";width:5px;height:5px;border-radius:50%;
+  background:#7A8DB3;box-shadow:0 0 6px rgba(151,175,254,.4)}
+.work-head .case-tag,.detail-body .case-tag{margin:0 0 18px}
+
+/* ---- Museum signal-path spec plate (featured card, no screenshot) ---- */
+.cm-stage.has-spec::after{display:none}
+.cm-stage.has-spec::before{opacity:.05}
+.cm-spec{position:absolute;inset:0;z-index:1;list-style:none;
+  display:flex;flex-direction:column;justify-content:center;gap:11px;
+  padding:26px 24px;font-family:var(--font-mono)}
+.cm-spec li{display:flex;align-items:baseline;gap:9px;font-size:12.5px;
+  color:var(--peri-light);letter-spacing:.01em;line-height:1.3}
+.cm-spec .cm-spec-mark{color:var(--mint);font-weight:700}
+
+/* ---- footer copyright is now a real node with a real year ---- */
+.foot-copy{color:#7A8DB3}
+.foot-copy b{color:var(--mint)}

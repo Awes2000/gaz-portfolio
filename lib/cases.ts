@@ -50,6 +50,9 @@ export interface CaseFile {
   slug: string;
   cls: string;
   title: string;
+  /** Honesty label, e.g. "Traineeship build · mentored". Rendered
+   *  on the card and the case detail so guided builds read as guided. */
+  tag?: string;
   tech: string[];
   desc: string;
   detail: string;
@@ -58,6 +61,9 @@ export interface CaseFile {
   media?: string;
   mediaUrl?: string;
   shots?: CaseShot[];
+  /** Terminal-style spec lines for featured cases with no screenshot
+   *  (hardware / on-site work). Rendered in the media stage. */
+  mediaSpec?: string[];
   video?: CaseVideo;
   sections?: CaseSections;
 }
@@ -66,6 +72,36 @@ export const CASES: CaseFile[] = [
   {
     feature: true,
     id: "CF-00 // PRIORITY",
+    slug: "amsterdam-museum",
+    cls: "CLASSIFIED",
+    title: "Amsterdam Museum exhibit",
+    tech: ["JavaScript", "Canvas", "Web Serial API", "Arduino / C++", "Docker", "PHP / MariaDB"],
+    desc: "Client work for a museum: an Arduino ultrasonic sensor drives a real-time canvas solar system that zooms as visitors step closer, over a Dockerized PHP/MariaDB backend.",
+    detail: "An interactive museum exhibit. An HC-SR04 ultrasonic sensor measures how close a visitor stands, averages the reading for stability, and streams it over USB serial at 115200 baud. The browser reads that stream through the Web Serial API and maps distance to scale: the closer you stand, the further a canvas-rendered solar system zooms in, eased with linear interpolation so the motion stays smooth. A Dockerized PHP and MariaDB backend sits behind it. Hardware, a serial bridge and a real-time front end, wired into one physical installation.",
+    meta: { role: "Creative developer · hardware to canvas", year: "2023", stack: "Arduino · Web Serial · Canvas", status: "Delivered · on-site exhibit" },
+    links: { github: "https://github.com/Awes2000/MuseumBO2" },
+    media: "solar-system.exhibit",
+    mediaUrl: "arduino · web serial · canvas",
+    mediaSpec: [
+      "HC-SR04 ultrasonic sensor",
+      "USB serial · 115200 baud",
+      "canvas solar system · lerp zoom",
+      "Docker · PHP · MariaDB",
+    ],
+    sections: {
+      problem:
+        "A museum wanted an exhibit visitors control with their body, not a touchscreen. Stepping toward it had to do something immediate and legible, and it had to run reliably on the floor all day.",
+      approach:
+        "I bridged hardware to the browser. An HC-SR04 ultrasonic sensor on an Arduino measures distance, averaged over ten readings to hold steady, and sends it over serial at 115200 baud. The Web Serial API reads that stream and maps distance to the zoom of a canvas-rendered solar system, with linear interpolation smoothing every transition.",
+      decisions:
+        "Web Serial kept the whole interaction in the browser, so there was no native app to install or maintain on site. A Dockerized PHP and MariaDB backend made the setup reproducible: one compose file brings the exhibit up the same way every time.",
+      result:
+        "A working installation where distance controls the solar system in real time. My strongest piece, and the one that taught me hardware, serial and real-time rendering in a single build.",
+    },
+  },
+  {
+    feature: true,
+    id: "CF-01",
     slug: "flurter",
     cls: "CLASSIFIED",
     title: "Flurter",
@@ -93,14 +129,15 @@ export const CASES: CaseFile[] = [
     },
   },
   {
-    id: "CF-01",
+    id: "CF-02",
     slug: "property-pulse",
     cls: "CLASSIFIED",
     title: "Property Pulse",
+    tag: "Traineeship build · mentored",
     tech: ["Next.js 16", "MongoDB", "Mapbox", "Cloudinary", "OAuth"],
-    desc: "A property rental listing platform: image uploads, interactive maps and Google sign-in.",
+    desc: "A property rental listing platform: image uploads, interactive maps and Google sign-in. A guided build from my CTO-mentored traineeship at Brigit.",
     detail: "A full-stack property rental platform built with Next.js 16 and MongoDB. Listings with Cloudinary image uploads, interactive Mapbox maps, a PhotoSwipe gallery, bookmarking and messaging, with Google OAuth via NextAuth. A real end-to-end product: data model, API routes and a polished front end.",
-    meta: { role: "Full-stack developer", year: "2025", stack: "Next.js · MongoDB · Mapbox", status: "Live on Vercel" },
+    meta: { role: "Full-stack developer · mentored", year: "2025", stack: "Next.js · MongoDB · Mapbox", status: "Live on Vercel" },
     links: { github: "https://github.com/Awes2000/property-pulse-nextjs", live: "https://property-pulse-nextjs-phi.vercel.app/" },
     shots: [
       { src: "/pp-home.jpg", alt: "Property Pulse home page with property search", width: 1440, height: 900 },
@@ -108,23 +145,24 @@ export const CASES: CaseFile[] = [
     ],
     sections: {
       problem:
-        "A rental platform lives or dies on how fast people can browse listings and how easily owners can publish them. The goal was a real end-to-end product, not a demo: data model, API routes and a polished front end.",
+        "A rental platform lives or dies on how fast people can browse listings and how easily owners can publish them. The brief was to build one end to end as a guided traineeship project: data model, API routes and a polished front end.",
       approach:
-        "Full-stack on Next.js 16 with MongoDB. Listings take Cloudinary image uploads, browsing gets interactive Mapbox maps and a PhotoSwipe gallery, and users get bookmarking and messaging behind Google OAuth via NextAuth.",
+        "Full-stack on Next.js 16 with MongoDB, built during my traineeship at Brigit under CTO mentorship. Listings take Cloudinary image uploads, browsing gets interactive Mapbox maps and a PhotoSwipe gallery, and users get bookmarking and messaging behind Google OAuth via NextAuth.",
       decisions:
         "Keeping the whole product in one Next.js codebase, with the API routes living next to the UI, kept the data model honest and the iteration loop short.",
-      result: "Live on Vercel as a working rental platform.",
+      result: "Live on Vercel as a working rental platform, and where the full Next.js stack clicked for me.",
     },
   },
   {
-    id: "CF-02",
+    id: "CF-03",
     slug: "prostore",
     cls: "CLASSIFIED",
     title: "ProStore",
+    tag: "Traineeship build · mentored",
     tech: ["Next.js 16", "TypeScript", "Prisma", "PostgreSQL", "NextAuth"],
-    desc: "A full-stack e-commerce store with a typed data layer, auth and an admin dashboard.",
+    desc: "A full-stack e-commerce store with a typed data layer, auth and an admin dashboard. A guided build from my CTO-mentored traineeship at Brigit.",
     detail: "A full-stack e-commerce store built with Next.js 16, TypeScript and Prisma against a Neon PostgreSQL database, with NextAuth v5 for auth. Product catalogue, cart and checkout flow, order history and a Recharts admin dashboard, with Radix UI and Tailwind on the front. The project where the back end and the front end finally met for me.",
-    meta: { role: "Full-stack developer", year: "2025", stack: "Next.js · TypeScript · Prisma", status: "Live on Vercel" },
+    meta: { role: "Full-stack developer · mentored", year: "2025", stack: "Next.js · TypeScript · Prisma", status: "Live on Vercel" },
     links: { github: "https://github.com/Awes2000/prostore", live: "https://prostore-tau-eight.vercel.app/" },
     shots: [
       { src: "/prostore-home.jpg", alt: "ProStore storefront with featured products", width: 1440, height: 900 },
@@ -141,15 +179,15 @@ export const CASES: CaseFile[] = [
     },
   },
   {
-    id: "CF-03",
+    id: "CF-04",
     slug: "colorpicker",
     cls: "CLASSIFIED",
     title: "Colorpicker",
     tech: ["JavaScript", "OOP", "SCSS"],
     desc: "A browser-based HSL palette generator: 99 random swatches, click any one to copy its value.",
     detail: "Generates 99 random HSL swatches on load; click any one to copy its value to the clipboard and the page title updates to match. Built with three ES6 classes (HSLGenerator, ColorList, ColorCard) and styled in SCSS. This is where object-oriented JavaScript clicked for me: structure, encapsulation and code that scales past one file.",
-    meta: { role: "Front-end developer", year: "2023", stack: "JS (ES6 classes) · SCSS", status: "Live demo" },
-    links: { github: "https://github.com/Awes2000/colorpicker", live: "https://28003.hosts2.ma-cloud.nl/colorpicker/index.html" },
+    meta: { role: "Front-end developer", year: "2024", stack: "JS (ES6 classes) · SCSS", status: "Source on GitHub" },
+    links: { github: "https://github.com/Awes2000/colorpicker" },
     shots: [{ src: "/colorpicker-grid.jpg", alt: "Colorpicker grid of 99 random HSL swatches", width: 1440, height: 900 }],
     sections: {
       problem:
@@ -158,7 +196,7 @@ export const CASES: CaseFile[] = [
         "Three ES6 classes split the responsibilities: HSLGenerator makes the colors, ColorList owns the collection, ColorCard renders each swatch and handles the copy click. Styled in SCSS, with the page title updating to the copied value.",
       decisions:
         "No framework on purpose. Handling state, rendering and events by hand is where object-oriented JavaScript clicked for me: structure, encapsulation and code that scales past one file.",
-      result: "The live demo is still up, and the fundamentals from this build carry into everything after it.",
+      result: "The source is on GitHub, and the fundamentals from this build carry into everything after it.",
     },
   },
 ];

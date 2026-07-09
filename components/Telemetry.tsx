@@ -1,54 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useReducedMotion } from "motion/react";
 import { T } from "@/components/T";
 import { useAmsterdamClock } from "@/lib/hooks/useAmsterdamClock";
 
-/* one honest start: when coding began (same as the static build) */
-const SINCE = new Date("2021-09-01T00:00:00");
-
-function sinceLabel(): string {
-  const ms = Date.now() - SINCE.getTime();
-  const days = ms / 86400000;
-  const years = Math.floor(days / 365.25);
-  const remDays = Math.floor(days - years * 365.25);
-  return `2021 · ${years}y ${remDays}d`;
-}
-
+/* Live status panel. Only honest signals here: LOCAL_TIME is a real
+   Amsterdam wall clock that hydrates on the client; CODING_SINCE is a
+   single fixed year. The old LATENCY row was a fabricated random ping
+   (and froze on its placeholder under reduced motion), so it is gone. */
 export function Telemetry() {
-  const reduce = !!useReducedMotion();
   const time = useAmsterdamClock();
-  const [since, setSince] = useState("2021");
-  const [ping, setPing] = useState("·· ms");
-  const [spark, setSpark] = useState<number[]>([]);
-
-  useEffect(() => {
-    const tick = () => setSince(sinceLabel());
-    tick();
-    const id = setInterval(tick, 1000);
-    return () => clearInterval(id);
-  }, []);
-
-  /* sparkline bars + jittering ping, exactly like js/app.js */
-  useEffect(() => {
-    /* bars populate right after mount (async, so SSR HTML stays stable) */
-    const seed = setTimeout(() => setSpark(Array.from({ length: 14 }, () => 4 + Math.random() * 10)), 0);
-    if (reduce) return () => clearTimeout(seed);
-    const id = setInterval(() => {
-      setPing((8 + Math.random() * 22).toFixed(0) + " ms");
-      setSpark((prev) => {
-        const next = [...prev];
-        const i = (Math.random() * next.length) | 0;
-        next[i] = 4 + Math.random() * 10;
-        return next;
-      });
-    }, 1400);
-    return () => {
-      clearTimeout(seed);
-      clearInterval(id);
-    };
-  }, [reduce]);
 
   return (
     <div className="telemetry" aria-label="Live system status">
@@ -67,18 +27,7 @@ export function Telemetry() {
         <div className="tele-row"><T k="tele.k.focus" className="k" /><T k="tele.v.focus" className="v" /></div>
         <div className="tele-row"><T k="tele.k.open" className="k" /><T k="tele.v.open" className="v mint" /></div>
         <div className="tele-row"><T k="tele.k.time" className="k" /><span className="v" id="tele-time">{time}</span></div>
-        <div className="tele-row"><T k="tele.k.since" className="k" /><span className="v mint" id="tele-since">{since}</span></div>
-        <div className="tele-row">
-          <T k="tele.k.latency" className="k" />
-          <span className="v">
-            <span className="tele-spark" id="tele-spark">
-              {spark.map((h, i) => (
-                <i key={i} style={{ height: `${h}px` }} />
-              ))}
-            </span>{" "}
-            <span id="tele-ping">{ping}</span>
-          </span>
-        </div>
+        <div className="tele-row"><T k="tele.k.since" className="k" /><span className="v mint">2021</span></div>
       </div>
     </div>
   );

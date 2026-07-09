@@ -79,6 +79,7 @@ export default async function WorkPage({ params }: { params: Promise<WorkParams>
           <header className="work-head">
             <span className="case-id">{c.id}</span>
             <h1 className="work-title">{c.title}</h1>
+            {c.tag && <span className="case-tag">{c.tag}</span>}
             <p className="work-desc">{c.desc}</p>
             <ul className="case-tech" aria-label="Technology">
               {c.tech.map((t) => (

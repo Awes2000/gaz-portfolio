@@ -13,6 +13,7 @@ function DetailBody({ c }: { c: CaseFile }) {
     <>
       <span className="d-id">{c.id}</span>
       <h3>{c.title}</h3>
+      {c.tag && <span className="case-tag">{c.tag}</span>}
       <p>{c.detail}</p>
       {c.shots && (
         <div className="detail-shots">

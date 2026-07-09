@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { T } from "@/components/T";
+import { useLang } from "@/components/LangProvider";
 import { toast } from "@/lib/bus";
 import { writeSessionValue } from "@/lib/hooks/useSessionFlag";
 
@@ -14,21 +15,12 @@ const TRUTHS = [
 ];
 
 export function Footer() {
+  const { t } = useLang();
   const eggIdx = useRef(0);
-  const ref = useRef<HTMLElement>(null);
-
-  /* fill the year (the footer.copy dictionary string re-injects an
-     empty #year span, same as the static build) */
-  useEffect(() => {
-    const fill = () => {
-      const y = ref.current?.querySelector("#year");
-      if (y) y.textContent = String(new Date().getFullYear());
-    };
-    fill();
-    const obs = new MutationObserver(fill);
-    if (ref.current) obs.observe(ref.current, { childList: true, subtree: true, characterData: false });
-    return () => obs.disconnect();
-  }, []);
+  /* Real year in the SSR HTML (no-JS / SEO safe). It resolves to the
+     build year on the server and the current year on the client;
+     suppressHydrationWarning covers the rare New-Year-boundary diff. */
+  const year = new Date().getFullYear();
 
   const onEgg = () => {
     toast(TRUTHS[eggIdx.current % TRUTHS.length], 3600);
@@ -49,9 +41,11 @@ export function Footer() {
   };
 
   return (
-    <footer ref={ref}>
+    <footer>
       <div className="foot-inner">
-        <T k="footer.copy" />
+        <span className="foot-copy">
+          © <span suppressHydrationWarning>{year}</span> Gabriël Awes Zoretić · {t("footer.builtline")}
+        </span>
         <button type="button" className="foot-egg" id="foot-egg" onClick={onEgg}>
           <T k="footer.egg" />
         </button>
