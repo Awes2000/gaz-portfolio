@@ -65,10 +65,12 @@ export function About() {
             <div className="cap-grid">
               {SKILLS.map((cap) => (
                 <div key={cap.name} className={cap.cls}>
-                  <h4>
-                    <span className="cap-perm">{cap.perm}</span> <span className="cap-name">{cap.name}</span>{" "}
+                  {/* h3 keeps the outline h1 -> h2 -> h3 (no skipped level).
+                      The permission string is decorative, hidden from AT. */}
+                  <h3>
+                    <span className="cap-perm" aria-hidden="true">{cap.perm}</span> <span className="cap-name">{cap.name}</span>{" "}
                     <T k={cap.stKey} className="st" />
-                  </h4>
+                  </h3>
                   <ul>
                     {cap.items.map((item) => (
                       <li key={item}>{item}</li>

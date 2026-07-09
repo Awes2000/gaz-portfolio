@@ -45,7 +45,13 @@
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 
 html{scroll-behavior:smooth;overflow-x:hidden}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  /* safety net: neutralise any looping/decorative animation not caught
+     by a targeted rule. Opacity/position transitions are left intact so
+     reveals still fade cleanly; only auto-playing motion is stopped. */
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important}
+}
 
 body{
   background:var(--navy);

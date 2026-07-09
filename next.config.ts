@@ -7,9 +7,14 @@ import type { NextConfig } from "next";
    scripts (the pre-paint gate, JSON-LD, hydration) and inline styles are
    allowed because the app is statically generated and cannot mint a
    per-request nonce without opting out of static rendering. */
+/* React's dev server needs eval() for fast refresh and better stacks;
+   production never evals, so 'unsafe-eval' is added in development only
+   and the deployed CSP stays strict. */
+const devScript = process.env.NODE_ENV === "production" ? "" : " 'unsafe-eval'";
+
 const csp = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline'",
+  `script-src 'self' 'unsafe-inline'${devScript}`,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data:",
   "font-src 'self' data:",
